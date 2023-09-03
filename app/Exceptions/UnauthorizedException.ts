@@ -10,13 +10,13 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 | a status code and error code for every exception.
 |
 | @example
-| new NotFoundException('message', 500, 'E_RUNTIME_EXCEPTION')
+| new UnauthorizedException('message', 500, 'E_RUNTIME_EXCEPTION')
 |
 */
-export default class NotFoundException extends Exception {
+export default class UnauthorizedException extends Exception {
   public async handle(error: this, ctx: HttpContextContract) {
-    ctx.response.status(404).send({
-      status: 'not_found',
+    ctx.response.status(400).send({
+      status: 'auth_error',
       message: error.message,
       data: null,
     })

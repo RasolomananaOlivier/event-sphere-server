@@ -1,11 +1,22 @@
 import { DateTime } from 'luxon'
-import { BaseModel, HasMany, ManyToMany, column, hasMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  HasMany,
+  ManyToMany,
+  column,
+  hasMany,
+  hasOne,
+  manyToMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import Event from './Event'
 import SocialMedia from './SocialMedia'
 
 export default class Organizer extends BaseModel {
   @column({ isPrimary: true })
   public id: number
+
+  @column()
+  public userId: number
 
   @hasMany(() => Event)
   public events: HasMany<typeof Event>

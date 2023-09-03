@@ -21,3 +21,4 @@
 import './routes/v1/events'
 import './routes/v1/eventTypes'
 import './routes/v1/organizers'
+import './routes/v1/auth'

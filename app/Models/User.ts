@@ -1,10 +1,14 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel } from '@ioc:Adonis/Lucid/Orm'
+import { column, beforeSave, BaseModel, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
+import Organizer from './Organizer'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: number
+
+  @hasOne(() => Organizer)
+  public organizer: HasOne<typeof Organizer>
 
   @column()
   public email: string
