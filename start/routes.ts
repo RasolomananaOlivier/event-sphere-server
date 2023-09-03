@@ -18,11 +18,5 @@
 |
 */
 
-import Route from '@ioc:Adonis/Core/Route'
-
-import './routes/events'
-import './routes/eventTypes'
-
-Route.get('/', async () => {
-  return { hello: 'go' }
-})
+import './routes/v1/events'
+import './routes/v1/eventTypes'

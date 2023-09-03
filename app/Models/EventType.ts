@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, HasMany, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import Event from './Event'
 
 export default class EventType extends BaseModel {
   @column({ isPrimary: true })
@@ -16,4 +17,9 @@ export default class EventType extends BaseModel {
 
   @column()
   public description: string
+
+  @hasMany(() => Event, {
+    foreignKey: 'typeId',
+  })
+  public events: HasMany<typeof Event>
 }
