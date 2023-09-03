@@ -2,6 +2,7 @@ import Organizer from 'App/Models/Organizer'
 import SocialMedia from 'App/Models/SocialMedia'
 
 interface OrganizerPayload {
+  userId: number
   name: string
   email: string
   phone: string
@@ -14,6 +15,7 @@ interface OrganizerPayload {
 export default class OrganizerRepository {
   public static async create(payload: OrganizerPayload) {
     const organizer = await Organizer.create(payload)
+
     return organizer
   }
 

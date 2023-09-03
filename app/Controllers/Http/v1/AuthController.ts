@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import BaseController from './BaseController'
 import UserService from 'App/Services/UserService'
+import querystring from 'querystring'
 
 export default class AuthController extends BaseController {
   public async register({ request, response, auth }: HttpContextContract) {
@@ -41,8 +42,17 @@ export default class AuthController extends BaseController {
     })
   }
 
-  public async me({ auth, response }: HttpContextContract) {
+  public async me({ auth, response, request }: HttpContextContract) {
     const user = auth.use('api').user
+
+    const queryObject = request.qs()
+    const includesValue = queryObject?.includes
+
+    if (includesValue && Array.isArray(includesValue)) {
+      if (includesValue.includes('organizer')) await user?.load('organizer')
+    } else if (includesValue && !Array.isArray(includesValue)) {
+      if (includesValue === 'organizer') await user?.load('organizer')
+    }
 
     return this.success({
       response,

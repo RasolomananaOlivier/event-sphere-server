@@ -1,13 +1,5 @@
 import { DateTime } from 'luxon'
-import {
-  BaseModel,
-  HasMany,
-  ManyToMany,
-  column,
-  hasMany,
-  hasOne,
-  manyToMany,
-} from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, HasMany, ManyToMany, column, hasMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Event from './Event'
 import SocialMedia from './SocialMedia'
 

@@ -19,9 +19,9 @@ export default class OrganizersController extends BaseController {
   /**
    * Create a new organizer
    */
-  public async create({ request, response }: HttpContextContract) {
+  public async create({ request, response, auth }: HttpContextContract) {
     try {
-      const organizer = await OrganizerService.create(request)
+      const organizer = await OrganizerService.create(auth, request)
 
       return this.success({
         response,
@@ -29,9 +29,7 @@ export default class OrganizersController extends BaseController {
         data: { organizer },
       })
     } catch (error) {
-      console.log(error)
-
-      return this.validationFailed({ response, errors: error.messages })
+      return this.validationFailed({ response, errors: error.messages || error.message })
     }
   }
 }
