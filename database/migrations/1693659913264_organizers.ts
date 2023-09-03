@@ -8,12 +8,12 @@ export default class extends BaseSchema {
       table.increments('id')
       // table.integer('user_id').unsigned().references('id').inTable('users')
       table.string('name')
-      table.text('description')
-      table.string('logo')
+      table.text('description').nullable()
+      table.string('logo').nullable()
       table.string('email')
       table.string('phone')
-      table.string('address')
-      table.string('website')
+      table.string('address').nullable()
+      table.string('website').nullable()
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

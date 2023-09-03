@@ -41,4 +41,12 @@ export default class EventRepository {
 
     return event
   }
+
+  public static async delete(id: number) {
+    const event = await Event.find(id)
+
+    if (!event) throw new NotFoundException(`Event with ID ${id} not found`)
+
+    await event.delete()
+  }
 }

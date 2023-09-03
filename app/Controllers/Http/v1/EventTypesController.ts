@@ -5,15 +5,17 @@ import BaseController from './BaseController'
 import CreateEventTypeValidator from 'App/Validators/EventTypes/CreateEventTypeValidator'
 import UpdateEventTypeValidator from 'App/Validators/EventTypes/UpdateEventTypeValidator'
 
+// TODO: add repository and service for event types
+
 export default class EventTypesController extends BaseController {
   /**
    * List all event types
    */
-  public async index(ctx: HttpContextContract) {
+  public async index({ response, request }: HttpContextContract) {
     const eventTypes = await EventType.all()
 
     return this.success({
-      ctx,
+      response,
       data: { eventTypes },
     })
   }
@@ -21,20 +23,20 @@ export default class EventTypesController extends BaseController {
   /**
    * Create a new event type
    */
-  public async create(ctx: HttpContextContract) {
+  public async create({ response, request }: HttpContextContract) {
     try {
-      const payload = await ctx.request.validate(CreateEventTypeValidator)
+      const payload = await request.validate(CreateEventTypeValidator)
 
       const eventType = await EventType.create(payload)
 
       return this.success({
-        ctx,
+        response,
         data: { eventType },
         statusCode: 201,
       })
     } catch (err) {
       return this.validationFailed({
-        ctx,
+        response,
         errors: err?.messages?.errors,
       })
     }
@@ -43,9 +45,7 @@ export default class EventTypesController extends BaseController {
   /**
    * Update an event type
    */
-  public async update(ctx: HttpContextContract) {
-    const { request, params } = ctx
-
+  public async update({ response, request, params }: HttpContextContract) {
     try {
       const payload = await request.validate(UpdateEventTypeValidator)
 
@@ -53,7 +53,7 @@ export default class EventTypesController extends BaseController {
 
       if (!eventType)
         return this.notFound({
-          ctx,
+          response,
           message: 'Event type not found',
         })
 
@@ -62,37 +62,15 @@ export default class EventTypesController extends BaseController {
       const eventTypeUpdated = await eventType.save()
 
       return this.success({
-        ctx,
+        response,
         message: 'Event updated successfully',
         data: { eventType: eventTypeUpdated },
       })
     } catch (err) {
       return this.validationFailed({
-        ctx,
+        response,
         errors: err?.messages?.errors,
       })
     }
-  }
-
-  /**
-   * Delete an event type
-   */
-  public async delete(ctx: HttpContextContract) {
-    const { params } = ctx
-
-    const eventType = await EventType.find(params.id)
-
-    if (!eventType)
-      return this.notFound({
-        ctx,
-        message: 'Event type not found',
-      })
-
-    await eventType.delete()
-
-    return this.success({
-      ctx,
-      message: 'Event type deleted',
-    })
   }
 }

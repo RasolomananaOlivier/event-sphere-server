@@ -12,8 +12,9 @@ export default class Organizer extends BaseModel {
 
   @manyToMany(() => SocialMedia, {
     pivotColumns: ['url'],
+    pivotTimestamps: false,
   })
-  public socialMedia: ManyToMany<typeof SocialMedia>
+  public socialMedias: ManyToMany<typeof SocialMedia>
 
   @column()
   public name: string

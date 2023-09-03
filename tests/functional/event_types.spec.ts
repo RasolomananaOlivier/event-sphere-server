@@ -23,9 +23,3 @@ test('update an event type', async ({ client }) => {
 
   response.assertStatus(200)
 })
-
-test('delete an event type', async ({ client }) => {
-  const response = await client.delete('/api/v1/event-types/1')
-
-  response.assertStatus(200)
-})

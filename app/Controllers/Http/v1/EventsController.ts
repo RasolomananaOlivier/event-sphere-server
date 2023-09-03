@@ -72,5 +72,12 @@ export default class EventsController extends BaseController {
   /**
    * Delete an event
    */
-  public async destroy({ request, response }: HttpContextContract) {}
+  public async delete({ request, response }: HttpContextContract) {
+    await EventService.delete(request)
+
+    return this.success({
+      response,
+      message: 'Event deleted successfully',
+    })
+  }
 }

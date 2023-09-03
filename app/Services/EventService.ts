@@ -28,4 +28,10 @@ export default class EventService {
 
     return event
   }
+
+  public static async delete(request: RequestContract) {
+    const id = request.param('id')
+
+    await EventRepository.delete(id)
+  }
 }

@@ -18,6 +18,8 @@ export default class Event extends BaseModel {
   // @belongsTo(() => Organizer)
   // public organizer: BelongsTo<typeof Organizer>
 
+  // TODO : add unit price
+
   @column()
   public organizerId: number
 
