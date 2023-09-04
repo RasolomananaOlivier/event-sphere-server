@@ -4,6 +4,8 @@ import OrganizerRepository from 'App/Repositories/OrganizerRepository'
 import CreateOrganizerValidator from 'App/Validators/Organizers/CreateOrganizerValidator'
 import Organizer from 'App/Models/Organizer'
 import LogicalException from 'App/Exceptions/LogicalException'
+import UpdateOrganizerValidator from 'App/Validators/Organizers/UpdateOrganizerValidator'
+import UpdateOrganizerSocialValidator from 'App/Validators/Organizers/UpdateOrganizerSocialValidator'
 
 export default class OrganizerService {
   public static async create(auth: AuthContract, request: RequestContract) {
@@ -40,7 +42,30 @@ export default class OrganizerService {
 
   public static async find() {}
 
-  public static async update() {}
+  public static async update(auth: AuthContract, request: RequestContract) {
+    const payload = await request.validate(UpdateOrganizerValidator)
+    const organizerId: number = +request.param('id')
+
+    const updatedOrganizer = await OrganizerRepository.update(auth, organizerId, payload)
+
+    return await OrganizerRepository.withSocialMedia(updatedOrganizer)
+  }
+
+  /**
+   * Update social media associated with the specified organizer
+   */
+  public static async updateSocialMedias(auth: AuthContract, request: RequestContract) {
+    const payload = await request.validate(UpdateOrganizerSocialValidator)
+    const organizerId: number = +request.param('id')
+
+    const updatedOrganizer = await OrganizerRepository.updateSocialMedias(
+      auth,
+      organizerId,
+      payload.socialMedias
+    )
+
+    return await OrganizerRepository.withSocialMedia(updatedOrganizer)
+  }
 
   public static async delete() {}
 }

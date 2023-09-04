@@ -1,7 +1,11 @@
+import { AuthContract } from '@ioc:Adonis/Addons/Auth'
+import LogicalException from 'App/Exceptions/LogicalException'
+import NotFoundException from 'App/Exceptions/NotFoundException'
 import Organizer from 'App/Models/Organizer'
 import SocialMedia from 'App/Models/SocialMedia'
+import { logger } from 'Config/app'
 
-interface OrganizerPayload {
+interface CreateOrganizerPayload {
   userId: number
   name: string
   email: string
@@ -12,8 +16,23 @@ interface OrganizerPayload {
   logo?: string
 }
 
+interface UpdateOrganizerPayload {
+  name?: string
+  email?: string
+  phone?: string
+  description?: string
+  address?: string
+  website?: string
+  logo?: string
+}
+
+interface SocialMediaPayload {
+  id: number
+  url: string
+}
+
 export default class OrganizerRepository {
-  public static async create(payload: OrganizerPayload) {
+  public static async create(payload: CreateOrganizerPayload) {
     const organizer = await Organizer.create(payload)
 
     return organizer
@@ -24,13 +43,13 @@ export default class OrganizerRepository {
     socialMedias: { id: number; url: string }[]
   ) {
     const organizer = await Organizer.find(organizerId)
-    if (!organizer) throw new Error(`Organizer with id ${organizerId} not found`)
+    if (!organizer) throw new NotFoundException(`Organizer with id ${organizerId} not found`)
 
     for (let index = 0; index < socialMedias.length; index++) {
       const id = socialMedias[index].id
 
       const socialMedia = SocialMedia.find(id)
-      if (!socialMedia) throw new Error(`Social media with id ${id} not found`)
+      if (!socialMedia) throw new NotFoundException(`Social media with id ${id} not found`)
 
       await organizer.related('socialMedias').attach({
         [id]: {
@@ -64,7 +83,52 @@ export default class OrganizerRepository {
 
   public static async find() {}
 
-  public static async update() {}
+  public static async update(
+    auth: AuthContract,
+    organizerId: number,
+    payload: UpdateOrganizerPayload
+  ) {
+    const userId = auth.user!.id
+
+    const organizer = await Organizer.findBy('userId', userId)
+
+    if (!organizer) throw new NotFoundException(`Organizer with userId ${userId} not found`)
+
+    if (organizer.id !== organizerId)
+      throw new LogicalException(`Not allowed to update organizer with id ${organizerId} `)
+
+    organizer.merge(payload)
+    await organizer.save()
+
+    return organizer
+  }
+
+  public static async updateSocialMedias(
+    auth: AuthContract,
+    organizerId: number,
+    payload: SocialMediaPayload[]
+  ) {
+    const userId = auth.user!.id
+    const organizer = await Organizer.findBy('userId', userId)
+
+    if (!organizer) throw new NotFoundException(`Organizer with userId ${userId} not found`)
+
+    if (organizer.id !== organizerId)
+      throw new LogicalException(`Not allowed to update organizer with id ${organizerId} `)
+
+    const syncPayload = payload.reduce((acc, curr) => {
+      return {
+        ...acc,
+        [curr.id]: {
+          url: curr.url,
+        },
+      }
+    }, {})
+
+    await organizer.related('socialMedias').sync(syncPayload)
+
+    return organizer
+  }
 
   public static async delete() {}
 }

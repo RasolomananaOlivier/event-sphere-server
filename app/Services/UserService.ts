@@ -39,4 +39,8 @@ export default class UserService {
 
     return user
   }
+
+  public static async update(request: RequestContract) {}
+
+  public static async delete(request: RequestContract) {}
 }

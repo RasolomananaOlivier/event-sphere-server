@@ -10,6 +10,7 @@ Route.group(() => {
      */
     Route.post('/organizers', 'OrganizersController.create')
     Route.put('/organizers/:id', 'OrganizersController.update')
+    Route.put('/organizers/:id/social-medias', 'OrganizersController.updateSocialMedias')
     Route.delete('/organizers/:id', 'OrganizersController.delete')
   }).middleware('auth')
 
