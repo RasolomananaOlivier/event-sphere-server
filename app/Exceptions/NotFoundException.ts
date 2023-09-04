@@ -15,8 +15,9 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 */
 export default class NotFoundException extends Exception {
   public async handle(error: this, ctx: HttpContextContract) {
-    ctx.response.status(404).send({
-      status: 'not_found',
+    return ctx.response.notFound({
+      status: 'failed',
+      code: 'E_NOT_FOUND',
       message: error.message,
       data: null,
     })

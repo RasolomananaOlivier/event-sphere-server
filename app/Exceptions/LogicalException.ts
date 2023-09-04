@@ -14,9 +14,10 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 |
 */
 export default class LogicalException extends Exception {
-  public async handle(error: this, ctx: HttpContextContract) {
-    ctx.response.status(this.status).send({
-      status: 'logical_error',
+  public async handle(error: this, { response }: HttpContextContract) {
+    return response.badRequest({
+      status: 'failed',
+      code: 'E_LOGICAL_EXCEPTION',
       message: error.message,
       data: null,
     })
