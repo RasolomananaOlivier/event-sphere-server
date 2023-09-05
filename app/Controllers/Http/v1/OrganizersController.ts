@@ -30,6 +30,19 @@ export default class OrganizersController extends BaseController {
   }
 
   /**
+   * Get all organizer's events
+   */
+  public async events({ request, response }: HttpContextContract) {
+    const events = await OrganizerService.events(request)
+
+    return this.success({
+      response,
+      message: `Organizer's events retrieved successfully`,
+      data: { events },
+    })
+  }
+
+  /**
    * Update an organizer
    */
   public async update({ request, response, auth }: HttpContextContract) {
@@ -58,5 +71,13 @@ export default class OrganizersController extends BaseController {
   /**
    * Delete an organizer
    */
-  public async delete({ request, response, auth }: HttpContextContract) {}
+  public async delete({ request, response, auth }: HttpContextContract) {
+    await OrganizerService.delete(auth, request)
+
+    return this.success({
+      response,
+      message: 'Organizer deleted successfully',
+      data: null,
+    })
+  }
 }
