@@ -14,8 +14,8 @@ Route.group(() => {
     Route.delete('/organizers/:id', 'OrganizersController.delete')
   }).middleware('auth')
 
-  Route.get('/organizers/events', 'OrganizersController.events')
-  Route.get('/organizers/:id/events', 'OrganizersController.event')
+  // Route.get('/organizers/events', 'OrganizersController.events')
+  Route.get('/organizers/:id/events', 'OrganizersController.events')
 })
   .prefix('api/v1')
   .namespace('App/Controllers/Http/v1')

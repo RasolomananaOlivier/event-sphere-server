@@ -67,5 +67,23 @@ export default class OrganizerService {
     return await OrganizerRepository.withSocialMedia(updatedOrganizer)
   }
 
-  public static async delete() {}
+  /**
+   * Retrieve all events associated with the organizer
+   */
+  public static async events(request: RequestContract) {
+    const organizerId: number = +request.param('id')
+
+    const organizer = await OrganizerRepository.find(organizerId)
+
+    return await organizer.related('events').query()
+  }
+
+  public static async delete(auth: AuthContract, request: RequestContract) {
+    const userId = auth.user!.id
+    const organizerAccount = await OrganizerRepository.find(+request.param('id'))
+    if (userId !== organizerAccount.userId)
+      throw new LogicalException(`You don't have permission to delete this organizer account`)
+
+    await OrganizerRepository.delete(organizerAccount.id)
+  }
 }

@@ -81,7 +81,21 @@ export default class OrganizerRepository {
     return await Organizer.all()
   }
 
-  public static async find() {}
+  public static async find(organizerId: number) {
+    const organizer = await Organizer.find(organizerId)
+
+    if (!organizer) throw new NotFoundException(`Organizer with ${organizerId} could not be found`)
+
+    return organizer
+  }
+
+  public static async findBy(key: string, value: any) {
+    const organizer = await Organizer.findBy(key, value)
+
+    if (!organizer) throw new NotFoundException(`Organizer with ${key} as ${value} not found`)
+
+    return organizer
+  }
 
   public static async update(
     auth: AuthContract,
@@ -130,5 +144,11 @@ export default class OrganizerRepository {
     return organizer
   }
 
-  public static async delete() {}
+  public static async delete(organizerId: number) {
+    const organizer = await Organizer.find(organizerId)
+    if (!organizer)
+      throw new NotFoundException(`Organizer with id ${organizerId} could not be found`)
+
+    await organizer.delete()
+  }
 }

@@ -24,7 +24,6 @@ export default class CreateEventValidator {
    *    ```
    */
   public schema = schema.create({
-    organizerId: schema.number(),
     typeId: schema.number(),
     title: schema.string(),
     description: schema.string(),
