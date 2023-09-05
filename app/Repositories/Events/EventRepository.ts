@@ -1,23 +1,9 @@
 import NotFoundException from 'App/Exceptions/NotFoundException'
 import Event from 'App/Models/Event'
-import { DateTime } from 'luxon'
-
-interface EventPayload {
-  // organiserId: number
-  typeId?: number
-  title?: string
-  description?: string
-  date?: DateTime
-  location?: string
-  duration?: number
-  deadline?: DateTime
-  maxAttendees?: number
-  price?: number
-  banner?: string
-}
+import { CreateEventPayload, UpdateEventPayload } from './event.repository'
 
 export default class EventRepository {
-  public static async create(payload: EventPayload) {
+  public static async create(payload: CreateEventPayload) {
     const event = await Event.create(payload)
 
     return event
@@ -31,7 +17,7 @@ export default class EventRepository {
     return event
   }
 
-  public static async update(id: number, payload: EventPayload) {
+  public static async update(id: number, payload: UpdateEventPayload) {
     const event = await Event.find(id)
 
     if (!event) throw new NotFoundException(`Event with ID ${id} not found`)
