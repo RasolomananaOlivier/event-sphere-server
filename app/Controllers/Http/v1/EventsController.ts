@@ -20,21 +20,14 @@ export default class EventsController extends BaseController {
   /**
    * Create a new event
    */
-  public async create({ request, response }: HttpContextContract) {
-    try {
-      const event = await EventService.create(request)
+  public async create({ auth, request, response }: HttpContextContract) {
+    const event = await EventService.create(auth, request)
 
-      return this.success({
-        response,
-        data: { event },
-        message: 'Event created successfully',
-      })
-    } catch (error) {
-      return this.validationFailed({
-        response,
-        errors: error?.messages?.errors,
-      })
-    }
+    return this.success({
+      response,
+      data: { event },
+      message: 'Event created successfully',
+    })
   }
 
   /**
@@ -52,21 +45,14 @@ export default class EventsController extends BaseController {
   /**
    * Update an event
    */
-  public async update({ request, response }: HttpContextContract) {
-    try {
-      const event = await EventService.update(request)
+  public async update({ auth, request, response }: HttpContextContract) {
+    const event = await EventService.update(auth, request)
 
-      return this.success({
-        response,
-        data: { event },
-        message: 'Event updated successfully',
-      })
-    } catch (error) {
-      return this.validationFailed({
-        response,
-        errors: error?.messages?.errors,
-      })
-    }
+    return this.success({
+      response,
+      data: { event },
+      message: 'Event updated successfully',
+    })
   }
 
   /**
