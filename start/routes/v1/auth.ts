@@ -2,10 +2,21 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
   /**
-   * Auth routes
+   * Auth local routes
    */
-  Route.post('/register', 'AuthController.register')
-  Route.post('/login', 'AuthController.login')
+  Route.group(() => {
+    Route.post('/register', 'AuthController.register')
+    Route.post('/login', 'AuthController.login')
+  }).prefix('local')
+
+  /**
+   * Auth social routes
+   */
+  Route.group(() => {
+    Route.get('redirect', 'AuthController.redirectToGoogle')
+    Route.get('callback', 'AuthController.handleGoogleCallback')
+  }).prefix('google')
+
   Route.post('/refresh', 'AuthController.refresh')
   Route.post('/forgot-password', 'AuthController.forgotPassword')
   Route.post('/reset-password', 'AuthController.resetPassword')

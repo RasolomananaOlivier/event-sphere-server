@@ -16,6 +16,11 @@ export default class UserRepository {
     return user
   }
 
+  public static async findOrCreate(where: any, payload: any) {
+    const user = await User.firstOrCreate(where, payload)
+    return user
+  }
+
   public static async find() {}
 
   public static async findAll() {}

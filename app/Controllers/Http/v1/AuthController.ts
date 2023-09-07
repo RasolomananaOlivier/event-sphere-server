@@ -60,4 +60,26 @@ export default class AuthController extends BaseController {
       data: { user },
     })
   }
+
+  /**
+   * Redirect to Google OAuth page
+   */
+  public async redirectToGoogle({ ally }: HttpContextContract) {
+    await ally.use('google').redirect()
+  }
+
+  /**
+   * Handle Google OAuth callback
+   */
+  public async handleGoogleCallback({ ally, auth, response }: HttpContextContract) {
+    const user = await UserService.findOrCreateByProvider(ally, 'google')
+
+    const token = await UserService.generateToken(auth, user)
+
+    return this.success({
+      response,
+      data: { user, token },
+      message: 'User logged in successfully',
+    })
+  }
 }

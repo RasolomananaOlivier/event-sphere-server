@@ -21,9 +21,10 @@ export default class EventService {
         `You don't have an organizer account. Please create one before creating an event`
       )
 
+    // @ts-ignore
     const event = await EventRepository.create({
       ...payload,
-      organiserId: organizerAccount.id,
+      organizerId: organizerAccount.id,
     })
 
     return event
@@ -55,6 +56,7 @@ export default class EventService {
     if (!eventType)
       throw new NotFoundException(`Event type with id ${payload.typeId} could not be found`)
 
+    // @ts-ignore
     const event = await EventRepository.update(id, payload)
 
     return event

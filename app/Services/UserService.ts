@@ -7,6 +7,7 @@ import LoginValidator from 'App/Validators/Auth/LoginValidator'
 import NotFoundException from 'App/Exceptions/NotFoundException'
 import Hash from '@ioc:Adonis/Core/Hash'
 import UnauthorizedException from 'App/Exceptions/UnauthorizedException'
+import { AllyContract, AllyUserContract, GoogleToken } from '@ioc:Adonis/Addons/Ally'
 
 export default class UserService {
   public static async create(request: RequestContract) {
@@ -17,6 +18,53 @@ export default class UserService {
     if (existingUser) throw new Error('Email already exists')
 
     const user = await UserRepository.create(payload)
+
+    return user
+  }
+
+  /**
+   * Find or create a user
+   */
+  public static async findOrCreateByProvider(
+    ally: AllyContract,
+    providerName: 'google' | 'facebook' | 'linkedin'
+  ) {
+    const provider = ally.use(providerName)
+
+    /**
+     * User has explicitly denied the login request
+     */
+    if (provider.accessDenied()) {
+      throw new Error('Access was denied')
+    }
+
+    /**
+     * Unable to verify the CSRF state
+     */
+    if (provider.stateMisMatch()) {
+      throw new Error('Request expired. Retry again')
+    }
+
+    /**
+     * There was an unknown error during the redirect
+     */
+    if (provider.hasError()) {
+      throw new Error('Unable to process request ' + provider.getError())
+    }
+
+    const providerUser = await provider.user()
+
+    const user = await UserRepository.findOrCreate(
+      {
+        email: providerUser.email,
+      },
+      {
+        email: providerUser.email,
+        firstName: providerUser.name?.split(' ')[0],
+        lastName: providerUser.name?.split(' ').slice(1).join(' '),
+        loginType: providerName,
+      }
+    )
 
     return user
   }

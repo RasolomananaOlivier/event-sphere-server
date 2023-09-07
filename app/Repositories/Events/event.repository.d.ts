@@ -1,11 +1,11 @@
 import { DateTime } from 'luxon'
 
 export interface CreateEventPayload {
-  organiserId: number
+  organizerId: number
   typeId: number
   title: string
   description: string
-  date: DateTimeColumnDecorator
+  date: DateTime
   location: string
   duration: number
   deadline: DateTime
