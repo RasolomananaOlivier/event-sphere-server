@@ -1,6 +1,7 @@
 import Event from 'App/Models/Event'
 import Factory from '@ioc:Adonis/Lucid/Factory'
 import { DateTime } from 'luxon'
+import SpeakerFactory from './SpeakerFactory'
 
 export default Factory.define(Event, ({ faker }) => {
   return {
@@ -15,4 +16,6 @@ export default Factory.define(Event, ({ faker }) => {
     price: faker.number.float({ min: 0, max: 1000000 }),
     banner: faker.image.url(),
   }
-}).build()
+})
+  .relation('speakers', () => SpeakerFactory)
+  .build()

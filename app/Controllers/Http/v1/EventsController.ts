@@ -2,14 +2,13 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import BaseController from './BaseController'
 import Event from 'App/Models/Event'
 import EventService from 'App/Services/EventService'
-import type { ValidationException } from '@ioc:Adonis/Core/Validator'
 
 export default class EventsController extends BaseController {
   /**
    * List all events
    */
   public async index({ response }: HttpContextContract) {
-    const events = await Event.query().preload('type')
+    const events = await Event.query().preload('type').preload('organizer').preload('speakers')
 
     return this.success({
       response,

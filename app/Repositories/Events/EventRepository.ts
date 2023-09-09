@@ -14,6 +14,10 @@ export default class EventRepository {
 
     if (!event) throw new NotFoundException(`Event with ID ${id} not found`)
 
+    await event.load('type')
+    await event.load('organizer')
+    await event.load('speakers')
+
     return event
   }
 
