@@ -78,7 +78,7 @@ export default class OrganizerRepository {
   }
 
   public static async findAll() {
-    return await Organizer.all()
+    return await Organizer.query().preload('user')
   }
 
   public static async find(organizerId: number) {

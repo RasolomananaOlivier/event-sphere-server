@@ -23,7 +23,10 @@ export default class UserRepository {
 
   public static async find() {}
 
-  public static async findAll() {}
+  public static async findAll() {
+    const users = await User.all()
+    return users
+  }
 
   public static async update() {}
 

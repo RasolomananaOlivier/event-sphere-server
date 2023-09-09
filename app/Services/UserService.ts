@@ -22,6 +22,11 @@ export default class UserService {
     return user
   }
 
+  public static async findAll() {
+    const users = await UserRepository.findAll()
+    return users
+  }
+
   /**
    * Find or create a user
    */

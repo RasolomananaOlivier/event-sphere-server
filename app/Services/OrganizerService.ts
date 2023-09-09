@@ -75,7 +75,7 @@ export default class OrganizerService {
 
     const organizer = await OrganizerRepository.find(organizerId)
 
-    return await organizer.related('events').query()
+    return await organizer.related('events').query().preload('type').preload('speakers')
   }
 
   public static async delete(auth: AuthContract, request: RequestContract) {
