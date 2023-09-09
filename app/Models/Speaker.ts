@@ -1,13 +1,13 @@
 import { DateTime } from 'luxon'
-import { BaseModel, HasMany, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, ManyToMany, column, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Event from './Event'
 
 export default class Speaker extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @hasMany(() => Event)
-  public events: HasMany<typeof Event>
+  @manyToMany(() => Event)
+  public events: ManyToMany<typeof Event>
 
   @column()
   public name: string

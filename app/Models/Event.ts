@@ -1,5 +1,14 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  BelongsTo,
+  HasMany,
+  ManyToMany,
+  belongsTo,
+  column,
+  hasMany,
+  manyToMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import EventType from './EventType'
 import Organizer from './Organizer'
 import Speaker from './Speaker'
@@ -21,8 +30,8 @@ export default class Event extends BaseModel {
 
   // TODO : add unit price
 
-  @hasMany(() => Speaker)
-  public speakers: HasMany<typeof Speaker>
+  @manyToMany(() => Speaker)
+  public speakers: ManyToMany<typeof Speaker>
 
   @column()
   public organizerId: number
