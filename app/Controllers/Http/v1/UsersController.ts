@@ -13,7 +13,13 @@ export default class UsersController extends BaseController {
     })
   }
 
-  public async show({}: HttpContextContract) {
-    return { hello: 'world' }
+  public async show({ response, request }: HttpContextContract) {
+    const user = await UserService.find(request)
+
+    return this.success({
+      response,
+      message: 'Users fetched successfully',
+      data: { user },
+    })
   }
 }

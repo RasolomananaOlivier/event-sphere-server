@@ -7,7 +7,7 @@ import LoginValidator from 'App/Validators/Auth/LoginValidator'
 import NotFoundException from 'App/Exceptions/NotFoundException'
 import Hash from '@ioc:Adonis/Core/Hash'
 import UnauthorizedException from 'App/Exceptions/UnauthorizedException'
-import { AllyContract, AllyUserContract, GoogleToken } from '@ioc:Adonis/Addons/Ally'
+import { AllyContract } from '@ioc:Adonis/Addons/Ally'
 
 export default class UserService {
   public static async create(request: RequestContract) {
