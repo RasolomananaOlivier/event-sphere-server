@@ -1,7 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import BaseController from './BaseController'
 import UserService from 'App/Services/UserService'
-import querystring from 'querystring'
 
 export default class AuthController extends BaseController {
   public async register({ request, response, auth }: HttpContextContract) {
