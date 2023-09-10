@@ -12,14 +12,14 @@ import {
 import EventType from './EventType'
 import Organizer from './Organizer'
 import Speaker from './Speaker'
+import Attendee from './Attendee'
 
 export default class Event extends BaseModel {
-  @column({ isPrimary: true })
-  public id: number
-
-  @column()
-  public typeId: number
-
+  /**
+   * Relationships
+   *
+   * @see https://docs.adonisjs.com/guides/models/relationships
+   */
   @belongsTo(() => EventType, {
     foreignKey: 'typeId',
   })
@@ -28,10 +28,24 @@ export default class Event extends BaseModel {
   @belongsTo(() => Organizer)
   public organizer: BelongsTo<typeof Organizer>
 
-  // TODO : add unit price
-
   @manyToMany(() => Speaker)
   public speakers: ManyToMany<typeof Speaker>
+
+  @hasMany(() => Attendee)
+  public attendees: HasMany<typeof Attendee>
+
+  /**
+   * Columns
+   *
+   * @see https://docs.adonisjs.com/guides/models/introduction#defining-columns
+   */
+  @column({ isPrimary: true })
+  public id: number
+
+  @column()
+  public typeId: number
+
+  // TODO : add unit price
 
   @column()
   public organizerId: number
