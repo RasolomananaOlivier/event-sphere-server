@@ -65,4 +65,17 @@ export default class EventsController extends BaseController {
       message: 'Event deleted successfully',
     })
   }
+
+  /**
+   * Retrieve event attendees
+   */
+  public async retrieveAttendees({ request, response }: HttpContextContract) {
+    const attendees = EventService.retrieveAttendees(request)
+
+    return this.success({
+      response,
+      data: { attendees },
+      message: 'Event attendees retrieve successfully',
+    })
+  }
 }

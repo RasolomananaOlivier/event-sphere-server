@@ -67,4 +67,12 @@ export default class EventService {
 
     await EventRepository.delete(id)
   }
+
+  public static async retrieveAttendees(request: RequestContract) {
+    const id: number = request.param('id')
+
+    const event = await EventRepository.find(id)
+
+    return event.attendees
+  }
 }
