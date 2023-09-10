@@ -22,7 +22,7 @@ export default class Payment extends BaseModel {
   @column()
   public attendeeId: number
 
-  @column()
+  @column.dateTime()
   public paymentDate: DateTime
 
   @column()

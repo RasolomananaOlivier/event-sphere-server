@@ -7,6 +7,7 @@ import Payment from './Payment'
 export enum AttendanceStatus {
   PRESENT = 'present',
   ABSENT = 'absent',
+  REGISTERED = 'registered',
 }
 
 export default class Attendee extends BaseModel {
@@ -38,7 +39,7 @@ export default class Attendee extends BaseModel {
   @column()
   public userId: number
 
-  @column()
+  @column.dateTime()
   public registrationDate: DateTime
 
   @column()

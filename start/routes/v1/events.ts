@@ -29,6 +29,20 @@ Route.group(() => {
      * endpoint: DELETE /api/v1/events/:id
      */
     Route.delete('/events/:id', 'EventsController.delete')
+
+    /**
+     * Register to an event
+     *
+     * endpoint: POST /api/v1/events/:id/register
+     */
+    Route.post('/events/:id/register', 'EventsController.register')
+
+    /**
+     * Unregister from an event
+     *
+     * endpoint: DELETE /api/v1/events/:id/unregister
+     */
+    Route.delete('/events/:id/unregister', 'EventsController.unregister')
   }).middleware('auth')
 })
   .prefix('api/v1')

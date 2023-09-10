@@ -3,6 +3,6 @@ import UserFactory from 'Database/factories/UserFactory'
 
 export default class extends BaseSeeder {
   public async run() {
-    await UserFactory.createMany(10)
+    await UserFactory.merge([{ email: 'test@gmail.com' }]).createMany(10)
   }
 }

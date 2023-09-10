@@ -2,6 +2,7 @@ import Event from 'App/Models/Event'
 import Factory from '@ioc:Adonis/Lucid/Factory'
 import { DateTime } from 'luxon'
 import SpeakerFactory from './SpeakerFactory'
+import AttendeeFactory from './AttendeeFactory'
 
 export default Factory.define(Event, ({ faker }) => {
   return {
@@ -17,5 +18,7 @@ export default Factory.define(Event, ({ faker }) => {
     banner: faker.image.url(),
   }
 })
+  .state('free', (event) => (event.price = 0))
   .relation('speakers', () => SpeakerFactory)
+  .relation('attendees', () => AttendeeFactory)
   .build()

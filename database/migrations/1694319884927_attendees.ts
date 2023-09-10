@@ -9,7 +9,7 @@ export default class extends BaseSchema {
       table.integer('event_id').unsigned().references('events.id').onDelete('CASCADE')
       table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE')
       table.dateTime('registration_date')
-      table.enum('attendance_status', ['present', 'absent'])
+      table.enum('attendance_status', ['present', 'absent', 'registered']).defaultTo('registered')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

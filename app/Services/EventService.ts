@@ -1,5 +1,6 @@
 import type { RequestContract } from '@ioc:Adonis/Core/Request'
 import type { AuthContract } from '@ioc:Adonis/Addons/Auth'
+import { DateTime } from 'luxon'
 import EventRepository from 'App/Repositories/Events/EventRepository'
 import CreateEventValidator from 'App/Validators/Events/CreateEventValidator'
 import UpdateEventValidator from 'App/Validators/Events/UpdateEventValidator'
@@ -8,8 +9,16 @@ import LogicalException from 'App/Exceptions/LogicalException'
 import OrganizerRepository from 'App/Repositories/OrganizerRepository'
 import EventType from 'App/Models/EventType'
 import NotFoundException from 'App/Exceptions/NotFoundException'
+import NotImplementedException from 'App/Exceptions/NotImplementedException'
+import Attendee, { AttendanceStatus } from 'App/Models/Attendee'
 
 export default class EventService {
+  /**
+   * Create a new event
+   * @param auth AuthContract
+   * @param request RequestContract
+   * @returns Promise<Event>
+   */
   public static async create(auth: AuthContract, request: RequestContract) {
     const payload = await request.validate(CreateEventValidator)
 
@@ -30,6 +39,11 @@ export default class EventService {
     return event
   }
 
+  /**
+   * Show a single event
+   * @param request RequestContract
+   * @returns Promise<Event>
+   */
   public static async find(request: RequestContract) {
     const id = request.param('id')
 
@@ -73,6 +87,71 @@ export default class EventService {
 
     const event = await EventRepository.find(id)
 
+    await event.load('attendees', (attendee) => attendee.preload('user'))
+
     return event.attendees
+  }
+
+  /**
+   * Register to an event
+   * @param auth AuthContract
+   * @param request RequestContract
+   * @returns Promise<Attendee>
+   */
+  public static async register(auth: AuthContract, request: RequestContract) {
+    const event = await EventRepository.find(+request.param('id'))
+    await event.load('attendees')
+
+    if (event.maxAttendees <= event.attendees.length - 1) {
+      throw new LogicalException(`Event is already full`)
+    }
+
+    const userId = auth.user!.id
+
+    /**
+     * Check if the user is already an attendee for the event
+     */
+    const existedAttendee = await event.related('attendees').query().where('userId', userId).first()
+    if (existedAttendee) {
+      throw new LogicalException('You are already registered to this event')
+    }
+
+    if (event.price === 0) {
+      const attendee = await event.related('attendees').create({
+        userId,
+        registrationDate: DateTime.now(),
+        attendanceStatus: AttendanceStatus.REGISTERED,
+      })
+
+      return attendee
+    } else {
+      throw new NotImplementedException("Payment for an event hasn't been implemented yet")
+    }
+  }
+
+  /**
+   * Unregister from an event
+   * @param auth AuthContract
+   * @param request RequestContract
+   * @returns Promise<void>
+   */
+  public static async unregister(auth: AuthContract, request: RequestContract) {
+    const event = await EventRepository.find(+request.param('id'))
+
+    const userId = auth.user!.id
+
+    /**
+     * Check if the user is already unregistered to the event
+     */
+    const existedAttendee = await event.related('attendees').query().where('userId', userId).first()
+    if (!existedAttendee) {
+      throw new LogicalException('You are not registered to this event')
+    }
+
+    if (event.price === 0) {
+      await event.related('attendees').query().where('userId', userId).delete()
+    } else {
+      throw new NotImplementedException("Payment for an event hasn't been implemented yet")
+    }
   }
 }

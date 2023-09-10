@@ -1,7 +1,7 @@
 import RegisterValidator from 'App/Validators/Auth/RegisterValidator'
 import type { RequestContract } from '@ioc:Adonis/Core/Request'
 import type { AuthContract } from '@ioc:Adonis/Addons/Auth'
-import UserRepository from 'App/Repositories/UserRepository'
+import UserRepository from 'App/Repositories/Users/UserRepository'
 import User from 'App/Models/User'
 import LoginValidator from 'App/Validators/Auth/LoginValidator'
 import NotFoundException from 'App/Exceptions/NotFoundException'

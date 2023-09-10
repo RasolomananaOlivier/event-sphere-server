@@ -70,12 +70,38 @@ export default class EventsController extends BaseController {
    * Retrieve event attendees
    */
   public async retrieveAttendees({ request, response }: HttpContextContract) {
-    const attendees = EventService.retrieveAttendees(request)
+    const attendees = await EventService.retrieveAttendees(request)
 
     return this.success({
       response,
       data: { attendees },
       message: 'Event attendees retrieve successfully',
+    })
+  }
+
+  /**
+   * Register to an event
+   */
+  public async register({ auth, request, response }: HttpContextContract) {
+    const attendee = await EventService.register(auth, request)
+
+    return this.success({
+      response,
+      data: { attendee },
+      message: 'Register to the event successfully',
+    })
+  }
+
+  /**
+   * Unregister to an event
+   */
+  public async unregister({ auth, request, response }: HttpContextContract) {
+    const attendee = await EventService.unregister(auth, request)
+
+    return this.success({
+      response,
+      data: { attendee },
+      message: 'Unregister to the event successfully',
     })
   }
 }
