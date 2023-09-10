@@ -3,7 +3,6 @@ import type { AuthContract } from '@ioc:Adonis/Addons/Auth'
 import { DateTime } from 'luxon'
 import EventRepository from 'App/Repositories/Events/EventRepository'
 import CreateEventValidator from 'App/Validators/Events/CreateEventValidator'
-import UpdateEventValidator from 'App/Validators/Events/UpdateEventValidator'
 import Organizer from 'App/Models/Organizer'
 import LogicalException from 'App/Exceptions/LogicalException'
 import OrganizerRepository from 'App/Repositories/OrganizerRepository'
@@ -11,6 +10,7 @@ import EventType from 'App/Models/EventType'
 import NotFoundException from 'App/Exceptions/NotFoundException'
 import NotImplementedException from 'App/Exceptions/NotImplementedException'
 import { AttendanceStatus } from 'App/Models/Attendee'
+import UpdateEventValidator from 'App/Validators/Events/UpdateEventValidator'
 
 export default class EventService {
   /**

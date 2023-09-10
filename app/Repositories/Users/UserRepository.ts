@@ -23,7 +23,13 @@ export default class UserRepository {
     return user
   }
 
-  public static async find() {}
+  public static async find(userId: number) {
+    const user = await User.find(userId)
+
+    if (!user) throw new NotFoundException('User not found')
+
+    return user
+  }
 
   public static async findAll() {
     const users = await User.all()
@@ -49,10 +55,10 @@ export default class UserRepository {
     user.email = payload.email
     await user.save()
 
-    // TODO: SEND EMAIL VERIFICATION
-
     return user
   }
+
+  public static async verifyEmail(token: string) {}
 
   public static async updatePassword(userId: number, payload: UserSecurityPayload) {
     const user = await User.find(userId)
@@ -65,5 +71,11 @@ export default class UserRepository {
     return user
   }
 
-  public static async delete() {}
+  public static async delete(userId: number) {
+    const user = await User.find(userId)
+
+    if (!user) throw new NotFoundException('User not found')
+
+    await user.delete()
+  }
 }

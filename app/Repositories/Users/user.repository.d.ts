@@ -1,6 +1,6 @@
 export interface UserInformationPayload {
-  firstName: string
-  lastName: string
+  firstName?: string
+  lastName?: string
 }
 
 export interface UserEmailPayload {

@@ -23,6 +23,7 @@ Route.group(() => {
 
   Route.post('/logout', 'AuthController.logout').middleware('auth')
   Route.get('/me', 'AuthController.me').middleware('auth')
+  Route.get('/verify-email', 'AuthController.verifyEmail')
 })
   .prefix('api/v1/auth')
   .namespace('App/Controllers/Http/v1')
