@@ -10,7 +10,7 @@ import OrganizerRepository from 'App/Repositories/OrganizerRepository'
 import EventType from 'App/Models/EventType'
 import NotFoundException from 'App/Exceptions/NotFoundException'
 import NotImplementedException from 'App/Exceptions/NotImplementedException'
-import Attendee, { AttendanceStatus } from 'App/Models/Attendee'
+import { AttendanceStatus } from 'App/Models/Attendee'
 
 export default class EventService {
   /**

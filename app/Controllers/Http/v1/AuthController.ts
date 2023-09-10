@@ -1,12 +1,23 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import BaseController from './BaseController'
 import UserService from 'App/Services/UserService'
+import Mail from '@ioc:Adonis/Addons/Mail'
 
 export default class AuthController extends BaseController {
   public async register({ request, response, auth }: HttpContextContract) {
     try {
       const user = await UserService.create(request)
       const token = await UserService.generateToken(auth, user)
+
+      await Mail.sendLater((message) => {
+        message
+          .to(user.email)
+          .subject('Email verification')
+          .htmlView('emails/verification', {
+            fullName: user.firstName + ' ' + user.lastName,
+            verificationUrl: 'http://localhost:3000/verify-email',
+          })
+      })
 
       return this.success({
         response,
