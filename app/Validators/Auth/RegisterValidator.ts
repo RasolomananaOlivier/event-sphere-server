@@ -36,6 +36,8 @@ export default class RegisterValidator {
       },
       [rules.confirmed()]
     ),
+    firstName: schema.string({ trim: true }),
+    lastName: schema.string({ trim: true }),
   })
 
   /**

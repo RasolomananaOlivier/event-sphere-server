@@ -8,6 +8,9 @@ import NotFoundException from 'App/Exceptions/NotFoundException'
 import Hash from '@ioc:Adonis/Core/Hash'
 import UnauthorizedException from 'App/Exceptions/UnauthorizedException'
 import { AllyContract } from '@ioc:Adonis/Addons/Ally'
+import LogicalException from 'App/Exceptions/LogicalException'
+import UpdateInformationValidator from 'App/Validators/Auth/UpdateInformationValidator'
+import Encryption from '@ioc:Adonis/Core/Encryption'
 
 export default class UserService {
   public static async create(request: RequestContract) {
@@ -15,7 +18,7 @@ export default class UserService {
 
     const existingUser = await UserRepository.findByEmail(payload.email)
 
-    if (existingUser) throw new Error('Email already exists')
+    if (existingUser) throw new LogicalException('Email already exists')
 
     const user = await UserRepository.create(payload)
 
@@ -25,6 +28,10 @@ export default class UserService {
   public static async findAll() {
     const users = await UserRepository.findAll()
     return users
+  }
+
+  public static async find(request: RequestContract) {
+    return await UserRepository.find(request.param('id'))
   }
 
   /**
@@ -80,7 +87,7 @@ export default class UserService {
     })
   }
 
-  public static async find(request: RequestContract) {
+  public static async login(request: RequestContract) {
     const payload = await request.validate(LoginValidator)
 
     const user = await UserRepository.findByEmail(payload.email)
@@ -93,7 +100,39 @@ export default class UserService {
     return user
   }
 
-  public static async update(request: RequestContract) {}
+  public static async update(auth: AuthContract, request: RequestContract) {
+    const userId: number = +request.param('id')
 
-  public static async delete(request: RequestContract) {}
+    if (auth.user!.id !== userId) {
+      throw new UnauthorizedException('You are not allowed to update this user')
+    }
+
+    const payload = await request.validate(UpdateInformationValidator)
+
+    const user = await UserRepository.update(userId, payload)
+
+    return user
+  }
+
+  public static async delete(auth: AuthContract, request: RequestContract) {
+    if (auth.user!.id !== +request.param('id')) {
+      throw new UnauthorizedException('You are not allowed to delete this user')
+    }
+
+    await UserRepository.delete(request.param('id'))
+  }
+
+  public static async verifyEmail(request: RequestContract) {
+    const token = request.input('token')
+    if (!token) throw new UnauthorizedException('Invalid token')
+
+    const decryptedToken = Encryption.decrypt(token) as any
+
+    if (!decryptedToken && decryptedToken.type !== 'email_verification')
+      throw new UnauthorizedException('Invalid token')
+
+    const user = await UserRepository.find(decryptedToken.userId)
+    user.emailVerified = true
+    await user.save()
+  }
 }
