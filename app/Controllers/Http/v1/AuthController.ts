@@ -23,10 +23,10 @@ export default class AuthController extends BaseController {
     })
   }
 
-  public async verifyEmail({ response, request }: HttpContextContract) {
-    await UserService.verifyEmail(request)
+  public async verifyEmail({ view, request }: HttpContextContract) {
+    await UserService.verifyEmail(view, request)
 
-    return 'Email verified successfully'
+    return await view.render('auth/email-verified')
   }
 
   public async login({ auth, request, response }: HttpContextContract) {

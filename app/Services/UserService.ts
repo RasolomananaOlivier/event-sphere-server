@@ -1,6 +1,7 @@
 import RegisterValidator from 'App/Validators/Auth/RegisterValidator'
 import type { RequestContract } from '@ioc:Adonis/Core/Request'
 import type { AuthContract } from '@ioc:Adonis/Addons/Auth'
+import type { ViewRendererContract } from '@ioc:Adonis/Core/View'
 import UserRepository from 'App/Repositories/Users/UserRepository'
 import User from 'App/Models/User'
 import LoginValidator from 'App/Validators/Auth/LoginValidator'
@@ -122,16 +123,23 @@ export default class UserService {
     await UserRepository.delete(request.param('id'))
   }
 
-  public static async verifyEmail(request: RequestContract) {
+  public static async verifyEmail(view: ViewRendererContract, request: RequestContract) {
     const token = request.input('token')
-    if (!token) throw new UnauthorizedException('Invalid token')
+    if (!token) {
+      return await view.render('auth/email-verification-error', { error: 'Invalid token provided' })
+    }
 
     const decryptedToken = Encryption.decrypt(token) as any
 
     if (!decryptedToken && decryptedToken.type !== 'email_verification')
-      throw new UnauthorizedException('Invalid token')
+      return await view.render('auth/email-verification-error', { error: 'Invalid token provided' })
 
     const user = await UserRepository.find(decryptedToken.userId)
+
+    if (user.emailVerified) {
+      return await view.render('auth/email-verification-error', { error: 'Email already verified' })
+    }
+
     user.emailVerified = true
     await user.save()
   }
