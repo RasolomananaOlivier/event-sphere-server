@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+import type { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
 
 export interface CreateEventPayload {
   organizerId: number
@@ -11,7 +12,7 @@ export interface CreateEventPayload {
   deadline: DateTime
   maxAttendees: number
   price: number
-  banner: string
+  banner?: MultipartFileContract
 }
 
 export interface UpdateEventPayload {
@@ -24,5 +25,5 @@ export interface UpdateEventPayload {
   deadline?: DateTime
   maxAttendees?: number
   price?: number
-  banner?: string
+  banner?: MultipartFileContract
 }

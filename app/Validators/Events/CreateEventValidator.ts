@@ -33,7 +33,10 @@ export default class CreateEventValidator {
     deadline: schema.date(),
     maxAttendees: schema.number(),
     price: schema.number(),
-    banner: schema.string(),
+    banner: schema.file.optional({
+      size: '2mb',
+      extnames: ['jpg', 'png', 'jpeg'],
+    }),
   })
 
   /**

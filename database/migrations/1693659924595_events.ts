@@ -18,7 +18,7 @@ export default class extends BaseSchema {
       table.dateTime('deadline')
       table.integer('max_attendees')
       table.double('price')
-      table.string('banner')
+      table.string('banner').nullable()
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

@@ -32,7 +32,10 @@ export default class UpdateEventValidator {
     deadline: schema.date.optional(),
     maxAttendees: schema.number.optional(),
     price: schema.number.optional(),
-    banner: schema.string.optional(),
+    banner: schema.file.optional({
+      size: '2mb',
+      extnames: ['jpg', 'png', 'jpeg'],
+    }),
     typeId: schema.number.optional(),
   })
 

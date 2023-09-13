@@ -14,6 +14,12 @@ import UpdateInformationValidator from 'App/Validators/Auth/UpdateInformationVal
 import Encryption from '@ioc:Adonis/Core/Encryption'
 
 export default class UserService {
+  /**
+   * Create a new user
+   *
+   * @param request RequestContract
+   * @returns Promise<User>
+   */
   public static async create(request: RequestContract) {
     const payload = await request.validate(RegisterValidator)
 
@@ -26,11 +32,22 @@ export default class UserService {
     return user
   }
 
+  /**
+   * Find all users
+   *
+   * @returns Promise<User[]>
+   */
   public static async findAll() {
     const users = await UserRepository.findAll()
     return users
   }
 
+  /**
+   * Find a user by id
+   *
+   * @param request RequestContract
+   * @returns Promise<User>
+   */
   public static async find(request: RequestContract) {
     return await UserRepository.find(request.param('id'))
   }

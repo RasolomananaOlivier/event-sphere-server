@@ -6,11 +6,10 @@ import CreateEventValidator from 'App/Validators/Events/CreateEventValidator'
 import Organizer from 'App/Models/Organizer'
 import LogicalException from 'App/Exceptions/LogicalException'
 import OrganizerRepository from 'App/Repositories/OrganizerRepository'
-import EventType from 'App/Models/EventType'
-import NotFoundException from 'App/Exceptions/NotFoundException'
 import NotImplementedException from 'App/Exceptions/NotImplementedException'
 import { AttendanceStatus } from 'App/Models/Attendee'
 import UpdateEventValidator from 'App/Validators/Events/UpdateEventValidator'
+import Drive from '@ioc:Adonis/Core/Drive'
 
 export default class EventService {
   /**
@@ -31,7 +30,7 @@ export default class EventService {
       )
 
     // @ts-ignore
-    const event = await EventRepository.create({
+    let event = await EventRepository.create({
       ...payload,
       organizerId: organizerAccount.id,
     })
@@ -65,10 +64,6 @@ export default class EventService {
 
     if (existedEvent.organizerId !== organizerAccount.id)
       throw new LogicalException(`You don't have permission to access this event`)
-
-    const eventType = await EventType.find(payload.typeId)
-    if (!eventType)
-      throw new NotFoundException(`Event type with id ${payload.typeId} could not be found`)
 
     // @ts-ignore
     const event = await EventRepository.update(id, payload)

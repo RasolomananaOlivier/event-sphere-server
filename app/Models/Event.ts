@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+import Drive from '@ioc:Adonis/Core/Drive'
 import {
   BaseModel,
   BelongsTo,
@@ -6,6 +7,7 @@ import {
   ManyToMany,
   belongsTo,
   column,
+  computed,
   hasMany,
   manyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
