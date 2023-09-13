@@ -30,7 +30,10 @@ export default class CreateOrganizerValidator {
     description: schema.string.optional(),
     address: schema.string.optional(),
     website: schema.string.optional([rules.url()]),
-    logo: schema.string.optional(),
+    logo: schema.file.optional({
+      size: '2mb',
+      extnames: ['jpg', 'png', 'jpeg'],
+    }),
     socialMedias: schema.array().members(
       schema.object().members({
         id: schema.number(),

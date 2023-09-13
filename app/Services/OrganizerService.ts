@@ -1,6 +1,6 @@
 import type { RequestContract } from '@ioc:Adonis/Core/Request'
 import type { AuthContract } from '@ioc:Adonis/Addons/Auth'
-import OrganizerRepository from 'App/Repositories/OrganizerRepository'
+import OrganizerRepository from 'App/Repositories/Organizers/OrganizerRepository'
 import CreateOrganizerValidator from 'App/Validators/Organizers/CreateOrganizerValidator'
 import Organizer from 'App/Models/Organizer'
 import LogicalException from 'App/Exceptions/LogicalException'

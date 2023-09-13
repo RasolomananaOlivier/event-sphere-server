@@ -3,39 +3,44 @@ import LogicalException from 'App/Exceptions/LogicalException'
 import NotFoundException from 'App/Exceptions/NotFoundException'
 import Organizer from 'App/Models/Organizer'
 import SocialMedia from 'App/Models/SocialMedia'
-import { logger } from 'Config/app'
-
-interface CreateOrganizerPayload {
-  userId: number
-  name: string
-  email: string
-  phone: string
-  description?: string
-  address?: string
-  website?: string
-  logo?: string
-}
-
-interface UpdateOrganizerPayload {
-  name?: string
-  email?: string
-  phone?: string
-  description?: string
-  address?: string
-  website?: string
-  logo?: string
-}
-
-interface SocialMediaPayload {
-  id: number
-  url: string
-}
+import type { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
+import Drive from '@ioc:Adonis/Core/Drive'
+import {
+  CreateOrganizerPayload,
+  UpdateOrganizerPayload,
+  SocialMediaPayload,
+} from './organizer.repository'
 
 export default class OrganizerRepository {
   public static async create(payload: CreateOrganizerPayload) {
-    const organizer = await Organizer.create(payload)
+    let logoPath: string | undefined
+    if (payload.logo) {
+      logoPath = await this.saveLogo(payload.logo)
+    }
+
+    const organizer = await Organizer.create({
+      ...payload,
+      logo: logoPath,
+    })
 
     return organizer
+  }
+
+  public static async saveLogo(logo: MultipartFileContract) {
+    await logo.moveToDisk('organizers_logo')
+
+    return await Drive.getUrl(`organizers_logo/${logo.fileName!}`)
+  }
+
+  public static async removeLogo(organizerId: number) {
+    const organizer = await Organizer.find(organizerId)
+    if (!organizer) {
+      throw new NotFoundException(`Organizer with id ${organizerId} not found`)
+    }
+
+    if (organizer.logo) {
+      await Drive.delete(organizer.logo)
+    }
   }
 
   public static async attachSocialMedia(
@@ -111,7 +116,16 @@ export default class OrganizerRepository {
     if (organizer.id !== organizerId)
       throw new LogicalException(`Not allowed to update organizer with id ${organizerId} `)
 
-    organizer.merge(payload)
+    let logoPath: string | undefined
+    if (payload.logo) {
+      await this.removeLogo(organizer.id)
+      logoPath = await this.saveLogo(payload.logo)
+    }
+
+    organizer.merge({
+      ...payload,
+      logo: logoPath,
+    })
     await organizer.save()
 
     return organizer
