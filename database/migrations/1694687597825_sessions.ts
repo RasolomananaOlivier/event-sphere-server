@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.text('description').nullable()
       table.dateTime('start_at')
       table.integer('duration')
-      table.enum('status', ['upcoming', 'live', 'completed'])
+      table.enum('status', ['upcoming', 'live', 'completed']).defaultTo('upcoming')
       table.integer('type_id').unsigned().references('session_types.id').onDelete('CASCADE')
       table.integer('event_id').unsigned().references('events.id').onDelete('CASCADE')
 

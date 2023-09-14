@@ -4,6 +4,8 @@ Route.group(() => {
   Route.get('/events', 'EventsController.index')
   Route.get('/events/:id', 'EventsController.show')
   Route.get('/events/:id/attendees', 'EventsController.retrieveAttendees')
+  Route.get('/events/:eventId/sessions', 'SessionsController.index')
+  Route.get('/events/:eventId/sessions/:sessionId', 'SessionsController.show')
 
   /**
    * List of the related events

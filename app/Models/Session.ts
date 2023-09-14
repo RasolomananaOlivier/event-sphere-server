@@ -39,6 +39,9 @@ export default class Session extends BaseModel {
   public sessionTypeId: number
 
   @column()
+  public eventId: number
+
+  @column()
   public title: string
 
   @column()
