@@ -89,4 +89,24 @@ export default class EventRepository {
 
     await event.delete()
   }
+
+  public static async findByType(typeId: number) {
+    const events = await Event.query()
+      .where('type_id', typeId)
+      .preload('type')
+      .preload('organizer')
+      .preload('speakers')
+
+    return events
+  }
+
+  public static async findByOrganizer(organizerId: number) {
+    const events = await Event.query()
+      .where('organizer_id', organizerId)
+      .preload('type')
+      .preload('organizer')
+      .preload('speakers')
+
+    return events
+  }
 }

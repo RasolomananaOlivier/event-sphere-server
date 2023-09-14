@@ -8,7 +8,20 @@ export default class EventsController extends BaseController {
    * List all events
    */
   public async index({ response }: HttpContextContract) {
+    // TODO: add filters based on date, price, duration and type
     const events = await Event.query().preload('type').preload('organizer').preload('speakers')
+
+    return this.success({
+      response,
+      data: { events },
+    })
+  }
+
+  /**
+   * List of the related events
+   */
+  public async related({ request, response }: HttpContextContract) {
+    const events = await EventService.related(request)
 
     return this.success({
       response,

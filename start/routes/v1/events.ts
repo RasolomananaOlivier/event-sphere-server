@@ -6,6 +6,13 @@ Route.group(() => {
   Route.get('/events/:id/attendees', 'EventsController.retrieveAttendees')
 
   /**
+   * List of the related events
+   *
+   * endpoint: GET /api/v1/events/:id/related
+   */
+  Route.get('/events/:id/related', 'EventsController.related')
+
+  /**
    * Require authentication
    */
   Route.group(() => {

@@ -5,11 +5,10 @@ import EventRepository from 'App/Repositories/Events/EventRepository'
 import CreateEventValidator from 'App/Validators/Events/CreateEventValidator'
 import Organizer from 'App/Models/Organizer'
 import LogicalException from 'App/Exceptions/LogicalException'
-import OrganizerRepository from 'App/Repositories/OrganizerRepository'
+import OrganizerRepository from 'App/Repositories/Organizers/OrganizerRepository'
 import NotImplementedException from 'App/Exceptions/NotImplementedException'
 import { AttendanceStatus } from 'App/Models/Attendee'
 import UpdateEventValidator from 'App/Validators/Events/UpdateEventValidator'
-import Drive from '@ioc:Adonis/Core/Drive'
 
 export default class EventService {
   /**
@@ -36,6 +35,22 @@ export default class EventService {
     })
 
     return event
+  }
+
+  /**
+   * List all related events (by organizer, speaker, etc)
+   */
+  public static async related(request: RequestContract) {
+    const id = request.param('id')
+
+    const event = await EventRepository.find(id)
+
+    const events = [
+      ...(await EventRepository.findByType(event.typeId)),
+      ...(await EventRepository.findByOrganizer(event.organizerId)),
+    ]
+
+    return events
   }
 
   /**
