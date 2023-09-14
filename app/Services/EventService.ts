@@ -11,7 +11,6 @@ import { AttendanceStatus } from 'App/Models/Attendee'
 import UpdateEventValidator from 'App/Validators/Events/UpdateEventValidator'
 import Event from 'App/Models/Event'
 import FilterEventValidator from 'App/Validators/Events/FilterEventValidator'
-import EventType from 'App/Models/EventType'
 
 export default class EventService {
   /**
