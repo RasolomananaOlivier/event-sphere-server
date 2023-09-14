@@ -9,6 +9,9 @@ import OrganizerRepository from 'App/Repositories/Organizers/OrganizerRepository
 import NotImplementedException from 'App/Exceptions/NotImplementedException'
 import { AttendanceStatus } from 'App/Models/Attendee'
 import UpdateEventValidator from 'App/Validators/Events/UpdateEventValidator'
+import Event from 'App/Models/Event'
+import FilterEventValidator from 'App/Validators/Events/FilterEventValidator'
+import EventType from 'App/Models/EventType'
 
 export default class EventService {
   /**
@@ -163,5 +166,26 @@ export default class EventService {
     } else {
       throw new NotImplementedException("Payment for an event hasn't been implemented yet")
     }
+  }
+
+  /**
+   * Find all events that support filtering by type, price, duration and date
+   */
+  public static async filter(request: RequestContract) {
+    const payload = await request.validate(FilterEventValidator)
+
+    const events = await Event.query()
+      .if(payload.typeId, (query) => query.whereIn('type_id', payload.typeId!))
+      .if(payload.minPrice, (query) => query.where('price', '>=', payload.minPrice!))
+      .if(payload.maxPrice, (query) => query.where('price', '<=', payload.maxPrice!))
+      .if(payload.maxDate, (query) => query.where('date', '<=', payload.maxDate?.toSQLDate()!))
+      .if(payload.minDate, (query) => query.where('date', '>=', payload.minDate?.toSQLDate()!))
+      .if(payload.minDuration, (query) => query.where('duration', '>=', payload.minDuration!))
+      .if(payload.maxDuration, (query) => query.where('duration', '<=', payload.maxDuration!))
+      .preload('type')
+      .preload('organizer')
+      .preload('speakers')
+
+    return events
   }
 }

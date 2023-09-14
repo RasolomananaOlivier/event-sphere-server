@@ -1,15 +1,25 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import BaseController from './BaseController'
-import Event from 'App/Models/Event'
 import EventService from 'App/Services/EventService'
 
 export default class EventsController extends BaseController {
   /**
    * List all events
    */
-  public async index({ response }: HttpContextContract) {
-    // TODO: add filters based on date, price, duration and type
-    const events = await Event.query().preload('type').preload('organizer').preload('speakers')
+  public async index({ response, request }: HttpContextContract) {
+    const events = await EventService.filter(request)
+
+    return this.success({
+      response,
+      data: { events },
+    })
+  }
+
+  /**
+   * List all events with filter
+   */
+  public async filter({ request, response }: HttpContextContract) {
+    const events = await EventService.filter(request)
 
     return this.success({
       response,
