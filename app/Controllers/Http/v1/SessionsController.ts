@@ -8,7 +8,7 @@ export default class SessionsController extends BaseController {
 
     return this.success({
       response,
-      message: 'Session type list retrieved successfully',
+      message: 'Session list retrieved successfully',
       data: { sessions },
     })
   }
@@ -18,14 +18,30 @@ export default class SessionsController extends BaseController {
 
     return this.success({
       response,
-      message: 'Session type retrieved successfully',
+      message: 'Session retrieved successfully',
       data: { session },
     })
   }
 
-  public async create({ request, response }: HttpContextContract) {}
+  public async create({ auth, request, response }: HttpContextContract) {
+    const session = await SessionService.create(auth, request)
 
-  public async update({ request, response }: HttpContextContract) {}
+    return this.success({
+      response,
+      message: 'Session created successfully',
+      data: { session },
+    })
+  }
+
+  public async update({ auth, request, response }: HttpContextContract) {
+    const session = await SessionService.update(auth, request)
+
+    return this.success({
+      response,
+      message: 'Session created successfully',
+      data: { session },
+    })
+  }
 
   public async delete({ request, response }: HttpContextContract) {}
 }

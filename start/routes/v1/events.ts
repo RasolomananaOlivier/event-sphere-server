@@ -4,6 +4,10 @@ Route.group(() => {
   Route.get('/events', 'EventsController.index')
   Route.get('/events/:id', 'EventsController.show')
   Route.get('/events/:id/attendees', 'EventsController.retrieveAttendees')
+
+  /**
+   * Sessions routes
+   */
   Route.get('/events/:eventId/sessions', 'SessionsController.index')
   Route.get('/events/:eventId/sessions/:sessionId', 'SessionsController.show')
 
@@ -52,6 +56,8 @@ Route.group(() => {
      * endpoint: DELETE /api/v1/events/:id/unregister
      */
     Route.delete('/events/:id/unregister', 'EventsController.unregister')
+
+    Route.post('/events/:eventId/sessions', 'SessionsController.create')
   }).middleware('auth')
 })
   .prefix('api/v1')

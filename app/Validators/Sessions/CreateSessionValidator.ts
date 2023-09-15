@@ -23,7 +23,14 @@ export default class CreateSessionValidator {
    *     ])
    *    ```
    */
-  public schema = schema.create({})
+  public schema = schema.create({
+    sessionTypeId: schema.number(),
+    title: schema.string(),
+    description: schema.string.optional(),
+    startAt: schema.date(),
+    duration: schema.number(),
+    status: schema.enum.optional(['upcoming', 'completed', 'live']),
+  })
 
   /**
    * Custom messages for validation failures. You can make use of dot notation `(.)`
