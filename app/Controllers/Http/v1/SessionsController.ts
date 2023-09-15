@@ -38,10 +38,18 @@ export default class SessionsController extends BaseController {
 
     return this.success({
       response,
-      message: 'Session created successfully',
+      message: 'Session updated successfully',
       data: { session },
     })
   }
 
-  public async delete({ request, response }: HttpContextContract) {}
+  public async delete({ auth, request, response }: HttpContextContract) {
+    await SessionService.delete(auth, request)
+
+    return this.success({
+      response,
+      message: 'Session deleted successfully',
+      data: null,
+    })
+  }
 }

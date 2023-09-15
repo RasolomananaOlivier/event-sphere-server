@@ -58,6 +58,8 @@ Route.group(() => {
     Route.delete('/events/:id/unregister', 'EventsController.unregister')
 
     Route.post('/events/:eventId/sessions', 'SessionsController.create')
+    Route.put('/events/:eventId/sessions/:sessionId', 'SessionsController.update')
+    Route.delete('/events/:eventId/sessions/:sessionId', 'SessionsController.delete')
   }).middleware('auth')
 })
   .prefix('api/v1')

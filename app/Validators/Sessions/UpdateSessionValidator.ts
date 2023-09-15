@@ -25,8 +25,12 @@ export default class UpdateSessionValidator {
    */
   public schema = schema.create({
     sessionTypeId: schema.number.optional(),
-    title: schema.string.optional(),
-    description: schema.string.optional(),
+    title: schema.string.optional({
+      trim: true,
+    }),
+    description: schema.string.optional({
+      trim: true,
+    }),
     startAt: schema.date.optional(),
     duration: schema.number.optional(),
     status: schema.enum.optional(['upcoming', 'completed', 'live']),

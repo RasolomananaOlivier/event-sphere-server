@@ -7,8 +7,9 @@ import CreateSessionValidator from 'App/Validators/Sessions/CreateSessionValidat
 import SessionType from 'App/Models/SessionType'
 import UnauthorizedException from 'App/Exceptions/UnauthorizedException'
 import { CreateEventPayload } from 'App/Repositories/Events/event.repository'
-import { CreateSessionPayload } from 'App/Repositories/Sessions/session.repo'
+import { CreateSessionPayload, UpdateSessionPayload } from 'App/Repositories/Sessions/session.repo'
 import LogicalException from 'App/Exceptions/LogicalException'
+import UpdateSessionValidator from 'App/Validators/Sessions/UpdateSessionValidator'
 
 export default class SessionService {
   public static async findAll(request: RequestContract) {
@@ -58,8 +59,6 @@ export default class SessionService {
 
     const event = await EventRepository.find(eventId)
 
-    console.log(event.organizerId, organizer.id)
-
     if (event.organizerId !== organizer.id) {
       throw new UnauthorizedException(`You don't have access to create session for this event`)
     }
@@ -69,7 +68,41 @@ export default class SessionService {
     return await session.load('type')
   }
 
-  public static async update(request: RequestContract) {}
+  public static async update(auth: AuthContract, request: RequestContract) {
+    const organizer = await auth.user!.related('organizer').query().first()
 
-  public static async delete(request: RequestContract) {}
+    if (!organizer) {
+      throw new LogicalException('You must be an organizer to update a session')
+    }
+
+    const payload = await request.validate(UpdateSessionValidator)
+
+    const event = await EventRepository.find(+request.param('eventId'))
+    if (event.organizerId !== organizer.id) {
+      throw new UnauthorizedException(`You don't have access to update session for this event`)
+    }
+
+    const session = await SessionRepository.update(
+      event,
+      +request.param('sessionId'),
+      payload as UpdateSessionPayload
+    )
+
+    return session
+  }
+
+  public static async delete(auth: AuthContract, request: RequestContract) {
+    const organizer = await auth.user!.related('organizer').query().first()
+
+    if (!organizer) {
+      throw new LogicalException('You must be an organizer to delete a session')
+    }
+
+    const event = await EventRepository.find(+request.param('eventId'))
+    if (event.organizerId !== organizer.id) {
+      throw new UnauthorizedException(`You don't have access to delete session for this event`)
+    }
+
+    await SessionRepository.delete(+request.param('sessionId'))
+  }
 }
