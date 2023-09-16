@@ -25,6 +25,14 @@ export default class EventRepository {
     return event
   }
 
+  public static async addSpeakers(event: Event, speakers: number[]) {
+    // TODO: add speakers to the event
+  }
+
+  public static async syncSpeakers(event: Event, speakers: number[]) {
+    // TODO: sync speakers to the event
+  }
+
   public static async saveBanner(banner: MultipartFileContract) {
     await banner.moveToDisk('banners')
 
