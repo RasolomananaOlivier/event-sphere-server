@@ -8,6 +8,7 @@ export interface CreateSessionPayload {
   startAt: DateTime
   duration: number
   status?: SessionStatus
+  speakers: number[]
 }
 
 export interface UpdateSessionPayload {
@@ -17,4 +18,5 @@ export interface UpdateSessionPayload {
   startAt?: DateTime
   duration?: number
   status?: SessionStatus
+  speakers?: number[]
 }

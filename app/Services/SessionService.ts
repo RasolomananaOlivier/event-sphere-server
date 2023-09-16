@@ -17,7 +17,7 @@ export default class SessionService {
 
     const event = await EventRepository.find(eventId)
 
-    return await event.related('sessions').query().preload('type')
+    return await event.related('sessions').query().preload('type').preload('speakers')
   }
 
   public static async find(request: RequestContract) {
@@ -30,6 +30,7 @@ export default class SessionService {
       .related('sessions')
       .query()
       .preload('type')
+      .preload('speakers')
       .where('id', sessionId)
       .first()
 
@@ -65,7 +66,12 @@ export default class SessionService {
 
     const session = await SessionRepository.create(event, payload as CreateSessionPayload)
 
-    return await session.load('type')
+    await SessionRepository.addSpeakers(session, payload.speakers)
+
+    await session.load('type')
+    await session.load('speakers')
+
+    return session
   }
 
   public static async update(auth: AuthContract, request: RequestContract) {
@@ -87,6 +93,13 @@ export default class SessionService {
       +request.param('sessionId'),
       payload as UpdateSessionPayload
     )
+
+    if (payload.speakers) {
+      await SessionRepository.syncSpeakers(session, payload.speakers)
+    }
+
+    await session.load('type')
+    await session.load('speakers')
 
     return session
   }

@@ -3,6 +3,7 @@ import { CreateSessionPayload, UpdateSessionPayload } from './session.repo'
 import Event from 'App/Models/Event'
 import SessionType from 'App/Models/SessionType'
 import Session from 'App/Models/Session'
+import Speaker from 'App/Models/Speaker'
 
 export default class SessionRepository {
   public static async findAll() {}
@@ -47,5 +48,25 @@ export default class SessionRepository {
     const session = await SessionRepository.find(id)
 
     await session.delete()
+  }
+
+  public static async addSpeakers(session: Session, speakers: number[]) {
+    await SessionRepository.validateSpeakers(speakers)
+
+    await session.related('speakers').attach(speakers)
+  }
+
+  public static async syncSpeakers(session: Session, speakers: number[]) {
+    await SessionRepository.validateSpeakers(speakers)
+
+    await session.related('speakers').sync(speakers)
+  }
+
+  private static async validateSpeakers(speakers: number[]) {
+    for (const id of speakers) {
+      if (!(await Speaker.find(id))) {
+        throw new NotFoundException(`Speaker with id ${id} could not be found`)
+      }
+    }
   }
 }

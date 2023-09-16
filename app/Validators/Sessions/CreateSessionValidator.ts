@@ -30,6 +30,7 @@ export default class CreateSessionValidator {
     startAt: schema.date(),
     duration: schema.number(),
     status: schema.enum.optional(['upcoming', 'completed', 'live']),
+    speakers: schema.array().members(schema.number()),
   })
 
   /**
