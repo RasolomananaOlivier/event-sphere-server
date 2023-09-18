@@ -11,6 +11,7 @@ import {
 } from '@ioc:Adonis/Lucid/Orm'
 import Organizer from './Organizer'
 import Attendee from './Attendee'
+import Speaker from './Speaker'
 
 export default class User extends BaseModel {
   /**
@@ -20,6 +21,9 @@ export default class User extends BaseModel {
    */
   @hasOne(() => Organizer)
   public organizer: HasOne<typeof Organizer>
+
+  @hasOne(() => Speaker)
+  public speaker: HasOne<typeof Speaker>
 
   @hasMany(() => Attendee)
   public attendees: HasMany<typeof Attendee>

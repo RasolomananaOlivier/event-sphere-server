@@ -31,6 +31,9 @@ export default class Speaker extends BaseModel {
   @column()
   public expertise: string
 
+  @column()
+  public userId: number
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

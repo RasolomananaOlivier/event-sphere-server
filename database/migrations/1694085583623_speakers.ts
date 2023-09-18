@@ -12,6 +12,7 @@ export default class extends BaseSchema {
       table.string('phone').nullable()
       table.string('photo').nullable()
       table.string('expertise').nullable()
+      table.integer('user_id').unsigned().references('users.id').onDelete('cascade')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

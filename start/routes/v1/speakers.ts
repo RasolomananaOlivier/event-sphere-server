@@ -12,4 +12,6 @@ Route.group(() => {
 
     Route.delete('/:speakerId', 'SpeakersController.delete')
   }).middleware('auth')
-}).prefix('api/v1/speakers')
+})
+  .namespace('App/Controllers/Http/v1')
+  .prefix('api/v1/speakers')
