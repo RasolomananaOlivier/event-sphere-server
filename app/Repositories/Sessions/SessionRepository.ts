@@ -62,7 +62,7 @@ export default class SessionRepository {
     await session.related('speakers').sync(speakers)
   }
 
-  private static async validateSpeakers(speakers: number[]) {
+  public static async validateSpeakers(speakers: number[]) {
     for (const id of speakers) {
       if (!(await Speaker.find(id))) {
         throw new NotFoundException(`Speaker with id ${id} could not be found`)

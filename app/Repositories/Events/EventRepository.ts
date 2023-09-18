@@ -4,6 +4,7 @@ import type { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
 import { CreateEventPayload, UpdateEventPayload } from './event.repository'
 import EventType from 'App/Models/EventType'
 import Drive from '@ioc:Adonis/Core/Drive'
+import SessionRepository from '../Sessions/SessionRepository'
 
 export default class EventRepository {
   public static async create(payload: CreateEventPayload) {
@@ -26,11 +27,15 @@ export default class EventRepository {
   }
 
   public static async addSpeakers(event: Event, speakers: number[]) {
-    // TODO: add speakers to the event
+    await SessionRepository.validateSpeakers(speakers)
+
+    event.related('speakers').attach(speakers)
   }
 
   public static async syncSpeakers(event: Event, speakers: number[]) {
-    // TODO: sync speakers to the event
+    await SessionRepository.validateSpeakers(speakers)
+
+    event.related('speakers').sync(speakers)
   }
 
   public static async saveBanner(banner: MultipartFileContract) {
