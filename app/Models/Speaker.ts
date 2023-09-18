@@ -1,7 +1,15 @@
 import { DateTime } from 'luxon'
-import { BaseModel, ManyToMany, column, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  BelongsTo,
+  ManyToMany,
+  belongsTo,
+  column,
+  manyToMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import Event from './Event'
 import Session from './Session'
+import User from './User'
 
 export default class Speaker extends BaseModel {
   @column({ isPrimary: true })
@@ -12,6 +20,9 @@ export default class Speaker extends BaseModel {
 
   @manyToMany(() => Session)
   public sessions: ManyToMany<typeof Session>
+
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
 
   @column()
   public name: string

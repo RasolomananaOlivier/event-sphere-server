@@ -3,15 +3,24 @@ import User from 'App/Models/User'
 import { CreateSpeakerPayload, UpdateSpeakerPayload } from './speaker.repo'
 import type { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
 import Drive from '@ioc:Adonis/Core/Drive'
-import NotFoundException from 'App/Exceptions/NotFoundException'
 
 export default class SpeakerRepository {
   public static async findAll() {
-    return await Speaker.query().preload('events').preload('sessions')
+    return await Speaker.query()
+      .preload('events')
+      .preload('sessions')
+      .preload('user', (query) => {
+        query.select('email')
+      })
   }
 
   public static async find(id: number) {
-    return await Speaker.find(id)
+    return await Speaker.query()
+      .where('id', id)
+      .preload('user', (query) => {
+        query.select('email')
+      })
+      .first()
   }
 
   public static async create(user: User, payload: CreateSpeakerPayload) {
@@ -31,7 +40,7 @@ export default class SpeakerRepository {
   }
 
   public static async removeImage(path: string) {
-    await Drive.delete(path)
+    await Drive.delete(path.split('/').slice(2).join('/'))
   }
 
   public static async delete(speaker: Speaker) {

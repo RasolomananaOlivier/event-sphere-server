@@ -45,7 +45,7 @@ export default class EventRepository {
     if (!event) throw new NotFoundException(`Event with ID ${eventId} not found`)
 
     if (event.banner) {
-      await Drive.delete(event.banner)
+      await Drive.delete(event.banner.split('/').slice(2).join('/'))
     }
   }
 

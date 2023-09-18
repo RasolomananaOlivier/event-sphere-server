@@ -26,7 +26,7 @@ export default class CreateSpeakerValidator {
   public schema = schema.create({
     name: schema.string({ trim: true }),
     bio: schema.string({ trim: true }),
-    email: schema.string({ trim: true }, [rules.email()]),
+    email: schema.string.optional({ trim: true }, [rules.email()]),
     phone: schema.string({}, [rules.mobile()]),
     photo: schema.file.optional({ size: '2mb', extnames: ['png', 'jpeg', 'jpg'] }),
     expertise: schema.string.optional({ trim: true }),

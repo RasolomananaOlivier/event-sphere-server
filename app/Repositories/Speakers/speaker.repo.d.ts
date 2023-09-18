@@ -1,7 +1,7 @@
 export interface CreateSpeakerPayload {
   name: string
   bio: string
-  email: string
+  email?: string
   phone: string
   photo?: string
   expertise?: string

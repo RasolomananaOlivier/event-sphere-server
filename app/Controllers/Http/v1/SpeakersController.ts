@@ -33,7 +33,15 @@ export default class SpeakersController extends BaseController {
     })
   }
 
-  public async update() {}
+  public async update({ auth, request, response }: HttpContextContract) {
+    return this.success({
+      response,
+      message: 'Speaker updated successfully',
+      data: {
+        speaker: await SpeakerService.update(auth, request),
+      },
+    })
+  }
 
   public async delete({ auth, request, response }: HttpContextContract) {
     await SpeakerService.delete(auth, request)
