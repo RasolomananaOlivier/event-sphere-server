@@ -59,6 +59,8 @@ Route.group(() => {
 
     Route.post('/events/:eventId/sessions', 'SessionsController.create')
     Route.put('/events/:eventId/sessions/:sessionId', 'SessionsController.update')
+    Route.post('/events/:eventId/sessions/:sessionId/speakers', 'SessionsController.addSpeakers')
+    Route.put('/events/:eventId/sessions/:sessionId/speakers', 'SessionsController.syncSpeakers')
     Route.delete('/events/:eventId/sessions/:sessionId', 'SessionsController.delete')
   }).middleware('auth')
 })

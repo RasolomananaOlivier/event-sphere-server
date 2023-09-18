@@ -52,4 +52,6 @@ export default class SessionsController extends BaseController {
       data: null,
     })
   }
+
+  // TODO: ADD METHODS TO HANDLE SESSION SPEAKERS
 }
