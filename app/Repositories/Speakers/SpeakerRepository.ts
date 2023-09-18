@@ -3,6 +3,7 @@ import User from 'App/Models/User'
 import { CreateSpeakerPayload, UpdateSpeakerPayload } from './speaker.repo'
 import type { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser'
 import Drive from '@ioc:Adonis/Core/Drive'
+import NotFoundException from 'App/Exceptions/NotFoundException'
 
 export default class SpeakerRepository {
   public static async findAll() {
@@ -33,5 +34,7 @@ export default class SpeakerRepository {
     await Drive.delete(path)
   }
 
-  public static async delete(id: number) {}
+  public static async delete(speaker: Speaker) {
+    await speaker.delete()
+  }
 }

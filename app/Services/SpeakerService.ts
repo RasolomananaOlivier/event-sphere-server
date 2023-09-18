@@ -39,4 +39,26 @@ export default class SpeakerService {
 
     return await SpeakerRepository.create(auth.user!, { ...payload, photo: pathName })
   }
+
+  public static async delete(auth: AuthContract, request: RequestContract) {
+    const userId = auth.user!.id
+
+    const existingSpeaker = await Speaker.query().where('userId', userId).first()
+    if (!existingSpeaker) {
+      throw new LogicalException(`You don't have a speaker account`)
+    }
+
+    const speakerId = +request.param('speakerId')
+    if (existingSpeaker.id !== speakerId) {
+      throw new LogicalException(`You don't have permission to delete this speaker`)
+    }
+
+    const speaker = await SpeakerRepository.find(speakerId)
+
+    if (!speaker) {
+      throw new NotFoundException(`Speaker with id ${speakerId} could not be found`)
+    }
+
+    await SpeakerRepository.delete(speaker)
+  }
 }

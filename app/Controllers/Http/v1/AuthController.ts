@@ -49,17 +49,11 @@ export default class AuthController extends BaseController {
     })
   }
 
-  public async me({ auth, response, request }: HttpContextContract) {
+  public async me({ auth, response }: HttpContextContract) {
     const user = auth.use('api').user
 
-    const queryObject = request.qs()
-    const includesValue = queryObject?.includes
-
-    if (includesValue && Array.isArray(includesValue)) {
-      if (includesValue.includes('organizer')) await user?.load('organizer')
-    } else if (includesValue && !Array.isArray(includesValue)) {
-      if (includesValue === 'organizer') await user?.load('organizer')
-    }
+    await user?.load('organizer')
+    await user?.load('speaker')
 
     return this.success({
       response,
