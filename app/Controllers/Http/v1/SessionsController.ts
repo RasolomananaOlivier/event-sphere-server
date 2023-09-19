@@ -53,5 +53,23 @@ export default class SessionsController extends BaseController {
     })
   }
 
-  // TODO: ADD METHODS TO HANDLE SESSION SPEAKERS
+  public async addSpeakers({ auth, request, response }: HttpContextContract) {
+    return this.success({
+      response,
+      message: 'Speakers added to session successfully',
+      data: {
+        speaker: await SessionService.addSpeakers(auth, request),
+      },
+    })
+  }
+
+  public async syncSpeakers({ auth, request, response }: HttpContextContract) {
+    return this.success({
+      response,
+      message: 'Speakers synced to session successfully',
+      data: {
+        speaker: await SessionService.syncSpeakers(auth, request),
+      },
+    })
+  }
 }

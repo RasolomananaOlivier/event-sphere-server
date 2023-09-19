@@ -9,6 +9,7 @@ import UnauthorizedException from 'App/Exceptions/UnauthorizedException'
 import { CreateSessionPayload, UpdateSessionPayload } from 'App/Repositories/Sessions/session.repo'
 import LogicalException from 'App/Exceptions/LogicalException'
 import UpdateSessionValidator from 'App/Validators/Sessions/UpdateSessionValidator'
+import SpeakerValidator from 'App/Validators/Speakers/SpeakerValidator'
 
 export default class SessionService {
   public static async findAll(request: RequestContract) {
@@ -116,5 +117,61 @@ export default class SessionService {
     }
 
     await SessionRepository.delete(+request.param('sessionId'))
+  }
+
+  public static async addSpeakers(auth: AuthContract, request: RequestContract) {
+    const { speakers } = await request.validate(SpeakerValidator)
+
+    const organizer = await auth.user!.related('organizer').query().first()
+
+    if (!organizer) {
+      throw new LogicalException('You must be an organizer to add speakers to a session')
+    }
+
+    const event = await EventRepository.find(+request.param('eventId'))
+    if (event.organizerId !== organizer.id) {
+      throw new UnauthorizedException(`You don't have access to delete session for this event`)
+    }
+
+    const sessionId = +request.param('sessionId')
+    const session = await event.related('sessions').query().where('id', sessionId).first()
+
+    if (!session) {
+      throw new NotFoundException(`Session with Id ${sessionId} could not be found`)
+    }
+
+    await SessionRepository.addSpeakers(session, speakers)
+
+    await session.load('speakers')
+
+    return session
+  }
+
+  public static async syncSpeakers(auth: AuthContract, request: RequestContract) {
+    const { speakers } = await request.validate(SpeakerValidator)
+
+    const organizer = await auth.user!.related('organizer').query().first()
+
+    if (!organizer) {
+      throw new LogicalException('You must be an organizer to add speakers to a session')
+    }
+
+    const event = await EventRepository.find(+request.param('eventId'))
+    if (event.organizerId !== organizer.id) {
+      throw new UnauthorizedException(`You don't have access to delete session for this event`)
+    }
+
+    const sessionId = +request.param('sessionId')
+    const session = await event.related('sessions').query().where('id', sessionId).first()
+
+    if (!session) {
+      throw new NotFoundException(`Session with Id ${sessionId} could not be found`)
+    }
+
+    await SessionRepository.syncSpeakers(session, speakers)
+
+    await session.load('speakers')
+
+    return session
   }
 }
