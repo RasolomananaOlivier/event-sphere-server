@@ -14,6 +14,7 @@ import Organizer from './Organizer'
 import Speaker from './Speaker'
 import Attendee from './Attendee'
 import Session from './Session'
+import Feedback from './Feedback'
 
 export default class Event extends BaseModel {
   /**
@@ -37,6 +38,9 @@ export default class Event extends BaseModel {
 
   @hasMany(() => Session)
   public sessions: HasMany<typeof Session>
+
+  @hasMany(() => Feedback)
+  public feedbacks: HasMany<typeof Feedback>
 
   /**
    * Columns

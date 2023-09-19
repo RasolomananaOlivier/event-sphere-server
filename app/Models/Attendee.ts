@@ -1,8 +1,18 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, HasOne, belongsTo, column, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  BelongsTo,
+  HasMany,
+  HasOne,
+  belongsTo,
+  column,
+  hasMany,
+  hasOne,
+} from '@ioc:Adonis/Lucid/Orm'
 import Event from './Event'
 import User from './User'
 import Payment from './Payment'
+import Feedback from './Feedback'
 
 export enum AttendanceStatus {
   PRESENT = 'present',
@@ -24,6 +34,9 @@ export default class Attendee extends BaseModel {
 
   @hasOne(() => Payment)
   public payment: HasOne<typeof Payment>
+
+  @hasMany(() => Feedback)
+  public feedbacks: HasMany<typeof Feedback>
 
   /**
    * Columns

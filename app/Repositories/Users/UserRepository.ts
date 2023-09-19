@@ -58,8 +58,6 @@ export default class UserRepository {
     return user
   }
 
-  // public static async verifyEmail(token: string) {}
-
   public static async updatePassword(userId: number, payload: UserSecurityPayload) {
     const user = await User.find(userId)
 
