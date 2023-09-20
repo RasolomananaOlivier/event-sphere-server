@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "engines": {
-    "node": ">=14 <15"
+    "node": ">=16.14"
   },
   "scripts": {
     "dev": "node ace serve --watch",
