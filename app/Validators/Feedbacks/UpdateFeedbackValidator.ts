@@ -23,7 +23,10 @@ export default class UpdateFeedbackValidator {
    *     ])
    *    ```
    */
-  public schema = schema.create({})
+  public schema = schema.create({
+    rating: schema.number.optional(),
+    comment: schema.string.optional(),
+  })
 
   /**
    * Custom messages for validation failures. You can make use of dot notation `(.)`
