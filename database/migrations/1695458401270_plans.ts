@@ -1,16 +1,13 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'payments'
+  protected tableName = 'plans'
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.integer('attendee_id').unsigned().references('attendees.id').onDelete('CASCADE')
-      table.dateTime('payment_date')
-      table.decimal('amount', 10, 2)
-      table.enum('status', ['pending', 'paid', 'failed']).defaultTo('pending')
-      table.enum('method', ['bank_transfer', 'credit_card', 'paypal'])
+      table.string('name')
+      table.text('description')
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

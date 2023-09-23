@@ -8,7 +8,7 @@ export default class extends BaseSeeder {
         event
           .apply('free')
           .with('speakers', 2)
-          .with('attendees', 10, (attendee) => attendee.with('payment').with('user'))
+          .with('attendees', 10, (attendee) => attendee.with('Payment').with('user'))
       )
       .createMany(3)
   }

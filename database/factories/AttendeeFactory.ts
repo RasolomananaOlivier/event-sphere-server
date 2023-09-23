@@ -15,5 +15,5 @@ export default Factory.define(Attendee, ({ faker }) => {
 })
   .relation('event', () => EventFactory)
   .relation('user', () => UserFactory)
-  .relation('payment', () => PaymentFactory)
+  .relation('Payment', () => PaymentFactory)
   .build()

@@ -33,7 +33,7 @@ export default class Attendee extends BaseModel {
   public user: BelongsTo<typeof User>
 
   @hasOne(() => Payment)
-  public payment: HasOne<typeof Payment>
+  public Payment: HasOne<typeof Payment>
 
   @hasMany(() => Feedback)
   public feedbacks: HasMany<typeof Feedback>

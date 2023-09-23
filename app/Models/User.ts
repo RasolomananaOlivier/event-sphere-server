@@ -12,6 +12,8 @@ import {
 import Organizer from './Organizer'
 import Attendee from './Attendee'
 import Speaker from './Speaker'
+import Invoice from './Invoice'
+import Subscription from './Subscription'
 
 export default class User extends BaseModel {
   /**
@@ -27,6 +29,12 @@ export default class User extends BaseModel {
 
   @hasMany(() => Attendee)
   public attendees: HasMany<typeof Attendee>
+
+  @hasMany(() => Invoice)
+  public invoices: HasMany<typeof Invoice>
+
+  @hasMany(() => Subscription)
+  public subscriptions: HasMany<typeof Subscription>
 
   /**
    * Columns
