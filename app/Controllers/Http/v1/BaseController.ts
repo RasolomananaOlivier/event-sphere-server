@@ -10,7 +10,7 @@ interface ResponseParms {
 
 export default class BaseController {
   protected success(args: ResponseParms) {
-    const { response, data, message = 'Operation successful', statusCode = 200 } = args
+    const { response, data = null, message = 'Operation successful', statusCode = 200 } = args
 
     response.status(statusCode).send({
       status: 'success',
