@@ -42,4 +42,28 @@ export default class UsersController extends BaseController {
       data: { user },
     })
   }
+
+  public async subscribe({ auth, response, request }: HttpContextContract) {
+    // TODO: Implement subscription
+  }
+
+  public async unsubscribe({ auth, response, request }: HttpContextContract) {
+    // TODO: Implement unsubscription
+  }
+
+  public async invoices({ auth, response, request }: HttpContextContract) {
+    // TODO: Implement invoices
+  }
+
+  public async invoice({ auth, response, request }: HttpContextContract) {
+    // TODO: Implement invoice
+  }
+
+  public async plan({ auth, response, request }: HttpContextContract) {
+    // TODO: Implement plan
+  }
+
+  public async payments({ auth, response, request }: HttpContextContract) {
+    // TODO: Implement payments
+  }
 }
