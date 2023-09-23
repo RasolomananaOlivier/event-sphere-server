@@ -11,6 +11,11 @@ import { AttendanceStatus } from 'App/Models/Attendee'
 import UpdateEventValidator from 'App/Validators/Events/UpdateEventValidator'
 import Event from 'App/Models/Event'
 import FilterEventValidator from 'App/Validators/Events/FilterEventValidator'
+import Stripe from 'stripe'
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2023-08-16',
+})
 
 export default class EventService {
   /**
@@ -137,7 +142,31 @@ export default class EventService {
 
       return attendee
     } else {
-      throw new NotImplementedException("Payment for an event hasn't been implemented yet")
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        metadata: {
+          eventId: event.id,
+          userId,
+        },
+        line_items: [
+          {
+            price_data: {
+              currency: 'usd',
+              product_data: {
+                name: event.title,
+                description: event.description,
+              },
+              unit_amount: event.price * 100,
+            },
+            quantity: 1,
+          },
+        ],
+        mode: 'payment',
+        success_url: `${process.env.APP_URL}/events/${event.id}/register/success`,
+        cancel_url: `${process.env.APP_URL}/events/${event.id}/register/cancel`,
+      })
+
+      return session.url
     }
   }
 

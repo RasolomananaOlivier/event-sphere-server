@@ -65,6 +65,7 @@
     "@adonisjs/mail": "^8.2.1",
     "@adonisjs/repl": "^3.1.0",
     "@adonisjs/view": "^6.2.0",
+    "@mezielabs/adonis-stripe": "^1.0.7",
     "@types/stripe-v3": "^3.1.29",
     "mysql2": "^3.6.0",
     "pg": "^8.11.3",

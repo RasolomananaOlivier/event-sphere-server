@@ -21,4 +21,10 @@ export default Env.rules({
   APP_NAME: Env.schema.string(),
   DRIVE_DISK: Env.schema.enum(['local'] as const),
   NODE_ENV: Env.schema.enum(['development', 'production', 'test'] as const),
+
+  STRIPE_SECRET_KEY: Env.schema.string(),
+  STRIPE_PUBLIC_KEY: Env.schema.string(),
+  STRIPE_WEBHOOK_SECRET: Env.schema.string(),
+  STRIPE_API_VERSION: Env.schema.string(),
+  STRIPE_TYPESCRIPT: Env.schema.string(),
 })

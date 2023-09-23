@@ -106,11 +106,19 @@ export default class EventsController extends BaseController {
    * Register to an event
    */
   public async register({ auth, request, response }: HttpContextContract) {
-    const attendee = await EventService.register(auth, request)
+    const result = await EventService.register(auth, request)
+
+    if (result && typeof result === 'string') {
+      return this.success({
+        response,
+        message: 'Checkout the payment page',
+        data: { url: result },
+      })
+    }
 
     return this.success({
       response,
-      data: { attendee },
+      data: { attendee: result },
       message: 'Register to the event successfully',
     })
   }

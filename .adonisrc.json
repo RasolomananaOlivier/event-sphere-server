@@ -25,7 +25,8 @@
     "@adonisjs/auth",
     "@adonisjs/ally",
     "@adonisjs/mail",
-    "@adonisjs/view"
+    "@adonisjs/view",
+    "@mezielabs/adonis-stripe"
   ],
   "aceProviders": [
     "@adonisjs/repl"
