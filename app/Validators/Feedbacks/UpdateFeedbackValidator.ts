@@ -1,4 +1,4 @@
-import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
+import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class UpdateFeedbackValidator {
@@ -24,7 +24,7 @@ export default class UpdateFeedbackValidator {
    *    ```
    */
   public schema = schema.create({
-    rating: schema.number.optional(),
+    rating: schema.number.optional([rules.range(0, 5)]),
     comment: schema.string.optional(),
   })
 

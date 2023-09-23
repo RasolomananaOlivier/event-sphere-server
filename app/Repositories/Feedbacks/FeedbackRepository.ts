@@ -1,6 +1,7 @@
 import NotFoundException from 'App/Exceptions/NotFoundException'
 import Event from 'App/Models/Event'
 import { CreateFeedbackPayload, UpdateFeedbackPayload } from './fedbacks.repo'
+import UnauthorizedException from 'App/Exceptions/UnauthorizedException'
 
 export default class FeedbackRepository {
   /**
@@ -60,12 +61,18 @@ export default class FeedbackRepository {
    * Update a feedback
    *
    * @param id
+   * @param attendeeId
    * @param payload
    * @param event
    * @returns Promise<Feedback>
    * @throws {NotFoundException}
    */
-  public static async update(id: number, payload: UpdateFeedbackPayload, event: Event) {
+  public static async update(
+    id: number,
+    attendeeId: number,
+    payload: UpdateFeedbackPayload,
+    event: Event
+  ) {
     const feedback = await event
       .related('feedbacks')
       .query()
@@ -77,6 +84,12 @@ export default class FeedbackRepository {
       throw new NotFoundException('Feedback not found')
     }
 
+    if (feedback.attendeeId !== attendeeId) {
+      throw new UnauthorizedException(
+        `You are not the attendee that give this feedback. Could not update the feedback`
+      )
+    }
+
     feedback.merge(payload)
 
     return await feedback.save()
@@ -86,15 +99,22 @@ export default class FeedbackRepository {
    * Delete a feedback
    *
    * @param id
+   * @param attendeeId
    * @param event
    * @returns Promise<void>
    * @throws {NotFoundException}
    */
-  public static async delete(id: number, event: Event) {
+  public static async delete(id: number, attendeeId: number, event: Event) {
     const feedback = await event.related('feedbacks').query().where('id', id).first()
 
     if (!feedback) {
       throw new NotFoundException('Feedback not found')
+    }
+
+    if (feedback.attendeeId !== attendeeId) {
+      throw new UnauthorizedException(
+        `You are not the attendee that give this feedback. Could not delete the feedback`
+      )
     }
 
     await feedback.delete()

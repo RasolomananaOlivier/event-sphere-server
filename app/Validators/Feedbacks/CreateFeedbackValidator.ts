@@ -1,4 +1,4 @@
-import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
+import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class CreateFeedbackValidator {
@@ -24,7 +24,7 @@ export default class CreateFeedbackValidator {
    *    ```
    */
   public schema = schema.create({
-    rating: schema.number(),
+    rating: schema.number([rules.range(0, 5)]),
     comment: schema.string(),
   })
 
@@ -39,5 +39,7 @@ export default class CreateFeedbackValidator {
    * }
    *
    */
-  public messages: CustomMessages = {}
+  public messages: CustomMessages = {
+    'rating.range': 'Rating must be between {{ options.start }} and {{ options.stop }}',
+  }
 }
