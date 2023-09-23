@@ -59,6 +59,10 @@ export default class UsersController extends BaseController {
     // TODO: Implement invoice
   }
 
+  public async downloadInvoice({ auth, response, request }: HttpContextContract) {
+    // TODO: Implement downloadInvoice
+  }
+
   public async plan({ auth, response, request }: HttpContextContract) {
     // TODO: Implement plan
   }
